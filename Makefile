@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gboof <gboof@student.42.fr>                +#+  +:+       +#+         #
+#    By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/18 16:43:12 by cegbulef          #+#    #+#              #
-#    Updated: 2023/05/11 20:51:31 by gboof            ###   ########.fr        #
+#    Updated: 2023/05/12 09:59:09 by cegbulef         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	span
+NAME		=	containers
 
 SRCS		=	main.cpp
 
