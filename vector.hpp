@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/12 10:59:12 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:27:24 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ public:
     /*
     ** Member Functions
     */
-   /************************ Constructor ************************/
+    /************************ Constructor ************************/
     explicit vector (const allocator_type& alloc = allocator_type()){}
 
     explicit vector (size_type n, const value_type& val = value_type(),
@@ -51,12 +51,10 @@ public:
     template <class InputIterator>
         vector(InputIterator first, InputIterator last, const allocator_type& = allocator_type());
     
-    vector(const vector& x);
-    vector(vector&& x)
-        noexcept(is_nothrow_move_constructible<allocator_type>::value);
-    vector(initializer_list<value_type> il);
-    vector(initializer_list<value_type> il, const allocator_type& a);
+    vector(const vector& x){}
+    /************************ Destructor ************************/
     ~vector();
+    
     vector& operator=(const vector& x);
     vector& operator=(vector&& x)
         noexcept(
