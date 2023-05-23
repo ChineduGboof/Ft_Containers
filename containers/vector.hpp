@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/14 00:18:24 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/23 08:08:25 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 #include <iostream>
 #include <memory>
+#include <exception>
 #include <vector>
+#include "../tools/type_traits.hpp"
+#include "../tools/iterator_traits.hpp"
+#include "../tools/vector_iterator.hpp"
 
 
 namespace ft {
@@ -32,8 +36,8 @@ public:
     typedef typename allocator_type::const_reference    const_reference;
     typedef typename allocator_type::pointer            pointer;
     typedef typename allocator_type::const_pointer      const_pointer;
-    // typedef ft::vector_iterator<value_type>             iterator;
-    // typedef ft::vector_iterator<const value_type>       const_iterator;
+    typedef ft::vector_iterator<value_type>             iterator;
+    typedef ft::vector_iterator<const value_type>       const_iterator;
     // typedef ft::reverse_iterator<iterator>              reverse_iterator;
     // typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
     typedef typename allocator_type::difference_type    difference_type;
@@ -47,37 +51,38 @@ public:
     explicit vector (const allocator_type& alloc = allocator_type()):   _data(0),
                                                                         _alloc(alloc),
                                                                         _size(0), 
-                                                                        _capacity(0) {}
+                                                                        _capacity(0) {
+                                                                            std::cout << "vector default constructor called" << std::endl;
+                                                                        }
 
     explicit vector (size_type n, const value_type& val = value_type(),
                     const allocator_type& alloc = allocator_type()):    _data(0),
                                                                         _alloc(alloc),
                                                                         _size(n), 
                                                                         _capacity(n) {
+            std::cout << "vector fill constructor 1 called" << std::endl;
             if (n > 0)
             {
+                std::cout << "vector fill constructor 2 called" << std::endl;
                 _data = alloc.allocate(_capacity);
                 for (size_type i = 0; i < _size; i++){
                     _alloc.construct(_data + i, val);
                 }
             }
     }
-    template <class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):    _data(0),
-                                                                                                            _alloc(alloc),
-                                                                                                            _size(0),
-                                                                                                            _capacity(0) 
-    {
-        insert(begin(), first, last);
-        std::distance(first, last);
-    }
+
+
+    // template <class InputIterator>
+    //     vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):    _data(0),
+    //                                                                                                         _alloc(alloc),
+    //                                                                                                         _size(0),
+    //                                                                                                         _capacity(0) 
+    // {}
     
     vector(const vector& x){}
     /************************ Destructor ************************/
-    ~vector()
-    {
-        clear();
-        _alloc.deallocate(_data, _capacity);
+    ~vector(){
+        std::cout << "vector destructor called" << std::endl;
     }
 
 private:
