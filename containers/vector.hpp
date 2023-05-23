@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/23 08:08:25 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/23 13:06:29 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,11 @@ public:
                                                                         _alloc(alloc),
                                                                         _size(n), 
                                                                         _capacity(n) {
-            std::cout << "vector fill constructor 1 called" << std::endl;
+            std::cout << "vector fill constructor called" << std::endl;
             if (n > 0)
             {
-                std::cout << "vector fill constructor 2 called" << std::endl;
-                _data = alloc.allocate(_capacity);
-                for (size_type i = 0; i < _size; i++){
+                _data = _alloc.allocate(_capacity);
+                for (size_type i = 0; i < _size; i++) {
                     _alloc.construct(_data + i, val);
                 }
             }
@@ -79,7 +78,7 @@ public:
     //                                                                                                         _capacity(0) 
     // {}
     
-    vector(const vector& x){}
+    // vector(const vector& x){}
     /************************ Destructor ************************/
     ~vector(){
         std::cout << "vector destructor called" << std::endl;
