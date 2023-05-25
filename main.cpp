@@ -2,7 +2,8 @@
 #include <string>
 #include <deque>
 #include <vector>
-#include "containers/vector.hpp"
+// #include "containers/vector.hpp"
+
 // #if 1 //CREATE A REAL STL EXAMPLE
 // 	#include <map>
 // 	#include <stack>
@@ -117,31 +118,32 @@
 // 	return (0);
 // }
 
-#include <iostream>
-#include <vector>
-int main()
-{
-	//	Checking the default constructor
-	std::vector<int> myInt;
-	ft::vector<int> myInt2;
 
-	std::cout << "default size: " << myInt.size() << std::endl;
+/************MAIN TO CHECK THE CONSTRUCTORS *******************/
 
-	//	Checking the fill constructor
-	std::vector<int> myIntFill(5, 4);
-	ft::vector<int> myIntFill2(5, 4);
-	std::cout << "fill size: " << myIntFill.size() << std::endl;
+// int main()
+// {
+// 	//	Checking the default constructor
+// 	std::vector<int> myInt;
+// 	ft::vector<int> myInt2;
 
-	// myIntFill2[1]
-	// *myIntFill2 + 1
+// 	std::cout << "default size: " << myInt.size() << std::endl;
 
-	std::vector<int>::const_iterator test = myIntFill.begin() + 3;
-	std::cout << *test << std::endl;
-}
+// 	//	Checking the fill constructor
+// 	std::vector<int> myIntFill(5, 4);
+// 	ft::vector<int> myIntFill2(5, 4);
+// 	std::cout << "fill size: " << myIntFill.size() << std::endl;
+
+// 	// myIntFill2[1]
+// 	// *myIntFill2 + 1
+
+// 	std::vector<int>::const_iterator test = myIntFill.begin() + 3;
+// 	std::cout << *test << std::endl;
+// }
 
 
-// #include <iostream>
-// #include <vector>
+/************MAIN TO CHECK THE ITERATORS *******************/
+
 // #include "tools/iterator_traits.hpp"
 
 // template <typename T>
@@ -265,3 +267,136 @@ int main()
 
 //     return 0;
 // }
+
+
+// /************MAIN TO CHECK THE RESERVE FUNCTION *******************/
+
+// int main() {
+//     std::vector<int> numbers;
+    
+//     // Print the initial capacity and size of the vector
+//     std::cout << "Initial Capacity: " << numbers.capacity() << std::endl;
+//     std::cout << "Initial Size: " << numbers.size() << std::endl;
+    
+//     // Reserve capacity for 10 elements
+//     numbers.reserve(10);
+    
+//     // Print the updated capacity and size of the vector
+//     std::cout << "Updated Capacity: " << numbers.capacity() << std::endl;
+//     std::cout << "Updated Size: " << numbers.size() << std::endl;
+    
+//     return 0;
+// }
+
+
+
+/************MAIN TO CHECK THE RESIZE FUNCTION *******************/
+
+// int main() {
+//     std::vector<int> numbers;
+//     numbers.push_back(1);
+//     numbers.push_back(2);
+//     numbers.push_back(3);
+//     numbers.push_back(4);
+//     numbers.push_back(5);
+
+//     std::cout << "Initial size: " << numbers.size() << std::endl;
+//     std::cout << "Initial elements: ";
+//     for (std::vector<int>::const_iterator it = numbers.begin(); it != numbers.end(); ++it) {
+//         std::cout << *it << " ";
+//     }
+//     std::cout << std::endl;
+
+//     // Case 1: Increase the size to 7 and initialize new elements with value 0
+//     numbers.resize(7, 0);
+
+//     std::cout << "Size after resize 1: " << numbers.size() << std::endl;
+//     std::cout << "Elements after resize 1: ";
+//     for (std::vector<int>::const_iterator it = numbers.begin(); it != numbers.end(); ++it) {
+//         std::cout << *it << " ";
+//     }
+//     std::cout << std::endl;
+
+//     // Case 2: Reduce the size to 3, removing excess elements
+//     numbers.resize(3);
+
+//     std::cout << "Size after resize 2: " << numbers.size() << std::endl;
+//     std::cout << "Elements after resize 2: ";
+//     for (std::vector<int>::const_iterator it = numbers.begin(); it != numbers.end(); ++it) {
+//         std::cout << *it << " ";
+//     }
+//     std::cout << std::endl;
+
+//     return 0;
+// }
+
+
+/************MAIN TO CHECK THE ASSIGN FUNCTION *******************/
+
+
+// int main() {
+//     std::vector<int> numbers;
+
+//     // Assign using the range version
+//     int rangeValues[] = {1, 2, 3, 4, 5};
+//     size_t rangeSize = sizeof(rangeValues) / sizeof(rangeValues[0]);
+//     // assign values from the first (rangeValues)to the last value(rangeValues + rangeSize)
+//     numbers.assign(rangeValues, rangeValues + rangeSize);
+//     std::cout << "range size: " << rangeSize << std::endl;
+//     std::cout << "After assign (range): ";
+//     for (size_t i = 0; i < numbers.size(); ++i) {
+//         std::cout << numbers[i] << " ";
+//     }
+//     std::cout << std::endl;
+
+//     // Assign using the fill version
+//     int fillValue = 9;
+//     size_t fillSize = 7;
+//     // fills an array of 7 values with 9
+//     numbers.assign(fillSize, fillValue);
+
+//     std::cout << "After assign (fill): ";
+//     for (size_t i = 0; i < numbers.size(); ++i) {
+//         std::cout << numbers[i] << " ";
+//     }
+//     std::cout << std::endl;
+
+//     return 0;
+// }
+
+
+/************MAIN TO CHECK THE USE OF ENABLE IFS *******************/
+#include <iterator>
+#include <type_traits>
+
+template <class Iterator>
+typename std::enable_if<!std::is_integral<Iterator>::value>::type
+print_range(Iterator first, Iterator last) {
+    std::cout << "Is Not Integral: ";
+    for (Iterator it = first; it != last; ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    std::vector<int> vec;
+    
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.push_back(5);
+
+    // Case 1: Using print_range with vector iterators
+    std::cout << "Printing vector elements: ";
+    print_range(vec.begin(), vec.end());
+
+    // Case 2: Using print_range with integral iterators
+    int arr[] = {6, 7, 8, 9, 10};
+    std::cout << "Printing array elements: ";
+    print_range(arr, arr + 5); // Will result in a compilation error
+    
+    return 0;
+}
+
