@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/24 20:19:18 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/25 18:21:06 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,13 +324,13 @@ public:
 
     /*
     ** Range (1)
-    ** @brief Assigns new contents to the vector, replacing its current
-    ** contents, add modifying its size accordingly.
-    ** New elements are contruct from each of the elements in that
-    ** range, between first and last, in the same order.
+    ** The new contents are elements constructed from each of the elements 
+    ** in the range between first and last, in the same order.
     ** @param first the first element in the range.
     ** @param last the last element in the range.
     ** enable this function if it is not integral else use the next assign function
+    ** type* = 0 construct is used to conditionally enable or disable the function based on the type trait check
+    ** reserve more space if the range is larger than current capacity, then update the values
     */
     template <class InputIt>
     void assign(InputIt first, InputIt last,
@@ -373,7 +373,32 @@ public:
         }
     }
 
+    /*
+    ** @brief Adds a new element at the end of the vector after its current last element.
+    ** The content of "val" is copied (moved) to the new element.
+    ** @param val The value to be copied.
+    ** This effectively increases the container size by one, 
+    ** which causes an automatic reallocation of the allocated storage space 
+    ** if -and only if- the new vector size surpasses the current vector capacity.
+    */
+    void push_back (const value_type& val) {
+        if (!_capacity)
+            this->reserve(1);
+        else if (_size == _capacity)
+            this->reserve(_capacity * 2);
+        _alloc.construct(_data + _size, val);
+        _size++;
+    }
 
+    /*
+    ** @brief Delete the last element of the container.
+    ** Reduce the size of the vector of one.
+    ** If the container is empty, cause undefined behavior.
+    */
+    void pop_back() {
+        _alloc.destroy(&_data[_size - 1]);
+        _size--;
+    }
 
 private:
     pointer           _data;
