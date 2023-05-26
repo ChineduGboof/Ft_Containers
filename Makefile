@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gboof <gboof@student.42.fr>                +#+  +:+       +#+         #
+#    By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/18 16:43:12 by cegbulef          #+#    #+#              #
-#    Updated: 2023/05/22 10:15:17 by gboof            ###   ########.fr        #
+#    Updated: 2023/05/26 15:34:20 by cegbulef         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJS		=	$(SRCS:%.cpp=%.o)
 
 CC			=	c++
 
-FLAGS		=	-std=c++98 -Wall -Wextra 
+FLAGS		=	-std=c++98 -Wall -Wextra  -g3
 # -Werror
 
 RM			=	rm -rf

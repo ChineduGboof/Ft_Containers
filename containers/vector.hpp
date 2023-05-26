@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/26 10:21:01 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/26 17:35:03 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,13 @@ public:
     ** in the container (this->end() - 1).
     ** @return A reverse Iterator to the reverse beginning of the.
     */
-    reverse_iterator rbegin() {
-        return reverse_iterator(this->end());
-    }
+    // reverse_iterator rbegin() {
+    //     return reverse_iterator(this->end());
+    // }
 
-    const_reverse_iterator rbegin() const {
-        return const_reverse_iterator(this->end());
-    }
+    // const_reverse_iterator rbegin() const {
+    //     return const_reverse_iterator(this->end());
+    // }
 
     /*
     ** @brief Give a reverse iterator point to the
@@ -136,13 +136,13 @@ public:
     ** in the container.
     ** @return the reverse iterator.
     */
-    reverse_iterator rend() {
-        return reverse_iterator(this->begin());
-    }
+    // reverse_iterator rend() {
+    //     return reverse_iterator(this->begin());
+    // }
 
-    const_reverse_iterator rend() const {
-        return const_reverse_iterator(this->begin());
-    }
+    // const_reverse_iterator rend() const {
+    //     return const_reverse_iterator(this->begin());
+    // }
     
     /************************ CAPACITY ************************/
 
@@ -157,6 +157,7 @@ public:
     /*
     ** @brief Returns the maximum potential number of elements the the
     ** vector can hold.
+    ** will fail on char
     */
     size_type max_size() const {
         return _alloc.max_size();
@@ -413,22 +414,18 @@ public:
     */
     iterator insert (iterator position, const value_type& val){
         difference_type difference = position - this->begin();
-        if (difference >= 0){
+        if (difference >= 0) {
             if (!_capacity)
                 this->reserve(1);
             else if (_size == _capacity) {
                 this->reserve(_capacity * 2);
             }
 
-            if (static_cast<size_type>(difference) > _size){
-                _alloc.construct(_data + _size, *(_data + _size - 1));
-            } else {
-                for (size_type i = _size; i > static_cast<size_type>(difference); i--){
-                    _alloc.construct(_data + i, *(_data + i - 1));
-                    _alloc.destroy(_data + i - 1);
-                }
-                _alloc.construct(_data + (size_type)difference, val);
+            for (size_type i = _size; i > static_cast<size_type>(difference); i--) {
+                _alloc.construct(_data + i, *(_data + i - 1));
+                _alloc.destroy(_data + i - 1);
             }
+            _alloc.construct(_data + (size_type)difference, val);
         }
         _size++;
         return position;
@@ -445,9 +442,6 @@ public:
     ** @param position The position where insert.
     ** @param n Amout of element to insert.
     ** @param val The element to insert.
-    ** 1, 2, 3, 4, 5, val, val
-    ** pos (3) diff (3) size(3) insert_pos(3)
-    ** it = pos(5) , it >= (3)
     */
 
     void insert(iterator position, size_type n, const value_type& val) {
@@ -474,6 +468,125 @@ public:
         _size = new_size;
     }
 
+    /*
+    ** @brief Insert element in range from ["first" to
+    ** "last") at "position". Can increase the capacity of
+    ** the container. Throw if the iterator given is not valid.
+    ** Reallocate all elements after the dist between first and last.
+    ** vec.insert(<start location>, <pointer to start of array>, <pointer to end of array>)
+    ** @param position the position where insert.
+    ** @param first the first element in the range.
+    ** @param last the last element in the range.
+    ** 1, 2, 3, 4 -> 1, 2, 3, 6, 7, 5
+    ** diff(3) | n (2) | new_size = (6)
+    ** i = 0; i < 3; i++; {1, 2, 3, ?, ?, ?} -> copy old values to temp_data
+    ** i = 3; i < 6; i++; {1, 2, 3, 6, 7, ?} -> copy new values to temp
+    ** i = 5, i < 6; i++; {1, 2, 3, 6, 7, 4} -> copy the last old value to temp
+    */
+    template <class Iterator>
+    void insert(iterator position, Iterator first, Iterator last,
+                typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) {
+        difference_type difference = position - this->begin();
+        size_type n = std::distance(first, last);
+        size_type new_size = _size + n;
+
+        if (new_size > _capacity) {
+            this->reserve(std::max(_capacity * 2, new_size));
+        }
+
+        pointer temp_data = _alloc.allocate(new_size);
+
+        // Copy elements before the insert position
+        for (size_type i = 0; i < static_cast<size_type>(difference); i++) {
+            _alloc.construct(temp_data + i, *(_data + i));
+        }
+
+        // Copy inserted elements
+        Iterator it = first;
+        for (size_type i = static_cast<size_type>(difference); i < static_cast<size_type>(difference) + n; i++) {
+            _alloc.construct(temp_data + i, *it++);
+        }
+
+        // Copy elements after the insert position
+        for (size_type i = static_cast<size_type>(difference) + n; i < new_size; i++) {
+            _alloc.construct(temp_data + i, *(_data + i - n));
+        }
+
+        // Destroy old elements
+        for (size_type i = 0; i < _size; i++) {
+            _alloc.destroy(_data + i);
+        }
+
+        _alloc.deallocate(_data, _capacity);
+        _data = temp_data;
+        _size = new_size;
+    }
+
+    /*
+    ** @brief Remove element from the vector at "position".
+    ** Reduce the size of 1;
+    ** @param position the iterator pointing to the
+    ** element to remove.
+    ** @return a pointer to the element a "&(*position) + 1"; 
+    ** An iterator pointing to the new location of the element 
+    ** that followed the last element erased by the function call. 
+    ** This is the container end if the operation erased the last element in the sequence.
+    ** {1, 2, 3, 4} -> {1, 2, 4}
+    */
+
+    iterator erase(iterator position) {
+        for (iterator it = position; it != this->end() - 1; it++) {
+            *it = *(it + 1);
+        }
+        _alloc.destroy(_data + _size - 1);
+        _size--;
+        return position;
+    }
+
+    /*
+    ** @brief Remove element from the vector a range of element.
+    ** Reduce the size by the number of element removed.
+    ** @param first the first element in the range.
+    ** @param last the last element in the range.
+    ** @return An iterator that point to the first element
+    ** after "last".
+    ** {1, 2, 3, 4, 5} -> {1, 2, 5}
+    */
+
+    iterator erase(iterator first, iterator last) {
+        iterator result = first;
+        for (iterator it = last; it != this->end(); ++it, ++first) {
+            *first = *it;
+        }
+        while (first != this->end()) {
+            _alloc.destroy(_data + (_size - 1));
+            --_size;
+            ++first;
+        }
+        return result;
+    }
+
+    /*
+    ** @brief Exchanges the content of the container 
+    ** by the content of x, which is another vector object 
+    ** of the same type. Sizes may differ.
+    ** All iterators, references, pointer on the swaped
+    ** objects stay valid.
+    ** foo(3, 100), bar(5, 200) -> foo(5, 200), bar(3, 100)
+    ** @param x the vector to swap.
+    */
+    void swap (vector& x) {
+        size_type temp_size = _size;
+        size_type temp_capacity = _capacity;
+        allocator_type temp_alloc = _alloc;
+        pointer temp_data = _data;
+
+        for (size_type i = 0; i < _size; i++){
+            alloc.construct(temp_data + i, _data + i);
+        }
+        s
+        if (std::max(*this, x))
+    }
 
 private:
     pointer           _data;
