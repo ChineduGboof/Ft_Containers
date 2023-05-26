@@ -8,3 +8,12 @@ rbegin()
 rend()
 reserve()
 resize()
+
+test the  vec.insert(vec.end(), 6);
+does it insert this 6 to the end of the vector or does it insert the previous value in the vector
+based on this code
+if (static_cast<size_type>(difference) > _size){
+    _alloc.construct(_data + _size, *(_data + _size - 1));
+}
+
+test the fill insert function cos i changed its implementation

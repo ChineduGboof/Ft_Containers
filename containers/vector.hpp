@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/25 18:21:06 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:21:01 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,6 +399,81 @@ public:
         _alloc.destroy(&_data[_size - 1]);
         _size--;
     }
+
+    /*
+    ** Single Element
+    ** @brief Insert an element at the position. Can increase the size
+    ** of the container. This action forces the container to
+    ** realocate all the elements that were after "postion"
+    ** to their new positions.
+    **
+    ** @param position The position where insert.
+    ** @param val The element to insert.
+    ** @return An iterator that points to the first of the newly inserted elements.
+    */
+    iterator insert (iterator position, const value_type& val){
+        difference_type difference = position - this->begin();
+        if (difference >= 0){
+            if (!_capacity)
+                this->reserve(1);
+            else if (_size == _capacity) {
+                this->reserve(_capacity * 2);
+            }
+
+            if (static_cast<size_type>(difference) > _size){
+                _alloc.construct(_data + _size, *(_data + _size - 1));
+            } else {
+                for (size_type i = _size; i > static_cast<size_type>(difference); i--){
+                    _alloc.construct(_data + i, *(_data + i - 1));
+                    _alloc.destroy(_data + i - 1);
+                }
+                _alloc.construct(_data + (size_type)difference, val);
+            }
+        }
+        _size++;
+        return position;
+    }
+
+    /*
+    ** Fill Insert
+    ** @brief Insert an element a "n" amount of times
+    ** starting from the specified position. Can increase the capacity
+    ** of the container. This action force the container to
+    ** realocate all the elements that were after "position"
+    ** to their new positions.
+    ** vec.insert(<start location>, <size>, <value>)
+    ** @param position The position where insert.
+    ** @param n Amout of element to insert.
+    ** @param val The element to insert.
+    ** 1, 2, 3, 4, 5, val, val
+    ** pos (3) diff (3) size(3) insert_pos(3)
+    ** it = pos(5) , it >= (3)
+    */
+
+    void insert(iterator position, size_type n, const value_type& val) {
+        difference_type difference = position - this->begin();
+        size_type new_size = _size + n;
+
+        if (new_size > _capacity) {
+            this->reserve(std::max(_capacity * 2, new_size));
+        }
+
+        pointer insert_pos = _data + difference;
+
+        // Shift existing elements to make space for the new elements
+        for (pointer it = _data + _size - 1; it >= insert_pos; --it) {
+            _alloc.construct(it + n, *it);
+            _alloc.destroy(it);
+        }
+
+        // Construct new elements at the insert position
+        for (size_type i = 0; i < n; ++i) {
+            _alloc.construct(insert_pos + i, val);
+        }
+
+        _size = new_size;
+    }
+
 
 private:
     pointer           _data;
