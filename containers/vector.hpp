@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/26 17:35:03 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:58:05 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"
 #include "../tools/iterator_validity.hpp"
-
+#include "../tools/reverse_iterator.hpp"
+#include "../tools/lexicographical_compare.hpp"
 
 namespace ft {
 
@@ -44,8 +45,8 @@ public:
     typedef typename allocator_type::const_pointer      const_pointer;
     typedef ft::vector_iterator<value_type>             iterator;
     typedef ft::vector_iterator<const value_type>       const_iterator;
-    // typedef ft::reverse_iterator<iterator>              reverse_iterator;
-    // typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
+    typedef ft::reverse_iterator<iterator>              reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
     typedef typename allocator_type::difference_type    difference_type;
     typedef typename allocator_type::size_type          size_type;
 
@@ -122,13 +123,13 @@ public:
     ** in the container (this->end() - 1).
     ** @return A reverse Iterator to the reverse beginning of the.
     */
-    // reverse_iterator rbegin() {
-    //     return reverse_iterator(this->end());
-    // }
+    reverse_iterator rbegin() {
+        return reverse_iterator(this->end());
+    }
 
-    // const_reverse_iterator rbegin() const {
-    //     return const_reverse_iterator(this->end());
-    // }
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(this->end());
+    }
 
     /*
     ** @brief Give a reverse iterator point to the
@@ -136,13 +137,13 @@ public:
     ** in the container.
     ** @return the reverse iterator.
     */
-    // reverse_iterator rend() {
-    //     return reverse_iterator(this->begin());
-    // }
+    reverse_iterator rend() {
+        return reverse_iterator(this->begin());
+    }
 
-    // const_reverse_iterator rend() const {
-    //     return const_reverse_iterator(this->begin());
-    // }
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(this->begin());
+    }
     
     /************************ CAPACITY ************************/
 
@@ -575,18 +576,43 @@ public:
     ** foo(3, 100), bar(5, 200) -> foo(5, 200), bar(3, 100)
     ** @param x the vector to swap.
     */
-    void swap (vector& x) {
+    void swap(vector& x) {
+        pointer temp_data = _data;
+        allocator_type temp_alloc = _alloc;
         size_type temp_size = _size;
         size_type temp_capacity = _capacity;
-        allocator_type temp_alloc = _alloc;
-        pointer temp_data = _data;
 
-        for (size_type i = 0; i < _size; i++){
-            alloc.construct(temp_data + i, _data + i);
-        }
-        s
-        if (std::max(*this, x))
+        _data = x._data;
+        _alloc = x._alloc;
+        _size = x._size;
+        _capacity = x._capacity;
+
+        x._data = temp_data;
+        x._alloc = temp_alloc;
+        x._size = temp_size;
+        x._capacity = temp_capacity;
     }
+
+    /*
+    ** @brief Removes (destroy) all elements from the
+    ** container. Final size is 0.
+    */
+    void clear() {
+        for (size_type i = 0; i < _size; i++) {
+            _alloc.destroy(_data + i);
+        }
+        _size = 0;
+    }
+
+    /************************ ALLOCATOR ************************/
+    /*
+    ** @brief Returns a copy of the allocator object
+    ** associated with the vector.
+    */
+    allocator_type get_allocator() const {
+        return _alloc;
+    }
+
 
 private:
     pointer           _data;
@@ -594,8 +620,75 @@ private:
     size_type         _size;
     size_type         _capacity;
 };
+
+/************************ NON-MEMBER FUNCTIONS ************************/
+/*
+** the operator== implementation you provided checks both the sizes 
+** and the values of the elements in the vectors for equality.
+*/
+
+template <class T, class Allocator>
+bool operator==(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	if (lhs.size() != rhs.size()) {
+		return false;
+	}
+
+	for (size_t i = 0; i < lhs.size(); i++) {
+		if (lhs.at(i) != rhs.at(i)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/*
+** The operator!= simply returns the negation of the operator==
+*/
+template <class T, class Allocator>
+bool operator!=(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	return !(lhs == rhs);
+}
+
+/*
+** @brief Compare vector container to know
+** if "lhs" elements are lexicographicalement less than "rhs".
+**
+** @param lhs vector to compare with "rhs".
+** @param rhs vector for comparison of "lhs".
+** @return true if "lhs" is lexicographicalement less, false otherwise.
+*/
+template <class T, class Allocator>
+bool operator<(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+
+template <class T, class Allocator>
+bool operator<=(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	return !(rhs < lhs);
+}
+
+
+template <class T, class Allocator>
+bool operator>(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	return rhs < lhs;
+}
+
+template <class T, class Allocator>
+bool operator>=(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
+	return !(lhs < rhs);
+}
+
+/*
+** @brief Overload of swap (vector).
+** The contents of container are swaped.
+** @param x, y the containers to swap.
+*/
+template <class T, class Allocator>
+void swap(ft::vector<T, Allocator> &lhs, ft::vector<T, Allocator> &rhs) {
+	lhs.swap(rhs);
+}
   
 }   //namespace
-
 
 #endif

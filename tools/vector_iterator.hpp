@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_iterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 11:16:18 by gboof             #+#    #+#             */
-/*   Updated: 2023/05/23 10:44:36 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:46:36 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ namespace ft {
 
             vector_iterator(pointer currentPos) : _currentPos(currentPos) {}
             
-            // template <class U>
-            // vector_iterator(const vector_iterator<U>& value) : _currentPos(value.base()) {}
+            template <class U>
+            vector_iterator(const vector_iterator<U>& value) : _currentPos(value.base()) {}
 
             vector_iterator& operator=(const vector_iterator& other) {
                 if (this != &other) {
