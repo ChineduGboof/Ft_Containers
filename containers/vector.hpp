@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/27 21:58:05 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/27 22:08:42 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,56 @@ public:
             }
     }
 
+    /************************ RANGE CONSTRUCTOR ************************/
+    template <class Iterator>
+    vector(Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
+            typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : _data(0),
+                                                                                                _alloc(alloc),
+                                                                                                _size(0),
+                                                                                                _capacity(0) {
+        ft::check_range(first, last);
+        difference_type range = 0;
+        for (Iterator temp = first; temp != last; temp++) {
+            range++;
+        }
 
-    // template <class InputIt>
-    //     vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type()):    _data(0),
-    //                                                                                                         _alloc(alloc),
-    //                                                                                                         _size(0),
-    //                                                                                                         _capacity(0) 
-    // {}
-    
-    // vector(const vector& x){}
+        _size = _capacity = static_cast<size_type>(range);
+        _data = _alloc.allocate(_capacity);
+        for (size_type i = 0; i < _size; i++) {
+            _alloc.construct(_data + i, *first++);
+        }
+    }
 
+    /************************ COPY CONSTRUCTOR ************************/
+    vector(const vector& x) : _data(0),
+                                _alloc(x._alloc),
+                                _size(0),
+                                _capacity(0) {
+        *this = x;
+    }
+
+    /************************ ASSIGNMENT OPERATOR ************************/
+    vector &operator=(const vector &x) {
+        if (!this->empty()) {
+            this->~vector();
+        }
+
+        if (this != &x) {
+            _data = _alloc.allocate(x._capacity);
+            _size = x._size;
+            _capacity = x._capacity;
+            for (size_type i = 0; i < _size; i++) {
+                _alloc.construct(_data + i, *(x._data + i));
+            }
+        }
+        return *this;
+    }
     /************************ DESTRUCTOR ************************/
-    ~vector(){
-        std::cout << "vector destructor called" << std::endl;
+
+    ~vector() {
+        this->clear();
+        _alloc.deallocate(_data, _capacity);
+        _capacity = 0;
     }
 
     /************************ ITERATORS ************************/
