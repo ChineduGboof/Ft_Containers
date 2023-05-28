@@ -18,6 +18,10 @@ test the fill insert function cos i changed its implementation
 
 check max_size (will fail on char)
 
-
+test the operator-- for reverse-iterator
 testers:
 terminator
+
+
+changes:
+reverse_iterator operator--(int)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 21:07:28 by gboof             #+#    #+#             */
-/*   Updated: 2023/05/27 21:50:25 by gboof            ###   ########.fr       */
+/*   Created: 2023/05/28 13:57:07 by cegbulef          #+#    #+#             */
+/*   Updated: 2023/05/28 13:57:11 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,76 +32,129 @@ namespace ft {
 		    iterator_type    _currentPos;
         
         public:
+            /*
+            ** default constructor: 
+            ** Constructs a reverse iterator that points to no object.
+            ** The internal base iterator is value-initialized.
+            */
             reverse_iterator() : _currentPos() {}
+            
+            /*
+            ** initalization constructor: 
+            ** Constructs a reverse iterator from some original iterator it.
+            */
+            reverse_iterator(iterator_type it) : _currentPos(it) {}
 
-            reverse_iterator(iterator_type x) : _currentPos(x) {}
-
+            /*
+            ** copy / type-cast constructor: 
+            ** Constructs a reverse iterator from some other reverse iterator
+            */
             template <class T>
-            reverse_iterator(const reverse_iterator<T> &value) : _currentPos(value.base()) {}
+            reverse_iterator(const reverse_iterator<T> &other) : _currentPos(other.base()) {}
 
-            reverse_iterator &operator=(const reverse_iterator &value) {
-                if (this != &value) {
-                    _currentPos = value.base();
+            reverse_iterator &operator=(const reverse_iterator &other) {
+                if (this != &other) {
+                    _currentPos = other.base();
                 }
                 return *this;
             }
 
             ~reverse_iterator() {}
 
+            /*
+            ** @brief: Returns a copy of the base iterator.
+            */
             iterator_type base() const {
                 return _currentPos;
             }
 
+            /*
+            ** @brief: Returns a reference to the element pointed to by the iterator.
+            ** the function decreases a copy of its base iterator 
+            ** and returns the result of dereferencing it.
+            */
             reference operator*() const {
                 iterator_type temp = _currentPos;
-                return *--temp;
+                return (*(--temp));
             }
 
+            /*
+            ** @brief: Returns a pointer to the element pointed to by the iterator
+            ** Internally, the function calls operator* and returns its address 
+            */
             pointer operator->() const {
-                return &this->operator*();
+                return &(operator*());
             }
 
+            /*
+            ** @brief: Accesses the element located n positions away 
+            ** from the element currently pointed to by the iterator.
+            ** Internally, the function accesses the proper element of its base iterator, 
+            ** returning the same as: base()[-n-1]. 
+            */
             reference operator[](difference_type n) const {
                 return *(*this + n);
             };
-
+            
+            /*
+            ** @brief: Returns a reverse iterator pointing to the element 
+            ** located n positions away from the element the iterator currently points to.
+            */
             reverse_iterator operator+(difference_type n) const {
                 return reverse_iterator(_currentPos - n);
             }
 
+            /*
+            ** @brief: Advances the reverse_iterator by n element positions.
+            */
             reverse_iterator &operator+=(difference_type n) {
                 _currentPos -= n;
                 return *this;
             }
 
+            /*
+            ** @brief: Advances the reverse_iterator by one position.
+            */
             reverse_iterator &operator++() {
                 --_currentPos;
                 return *this;
             }
 
             reverse_iterator operator++(int) {
-                reverse_iterator temp(*this);
-                --_currentPos;
+                reverse_iterator temp = *this;
+                ++(*this);
                 return temp;
             }
 
+            /*
+            ** @brief: Returns a reverse iterator pointing to the element 
+            ** located n positions before the element the iterator currently points to.
+            */
             reverse_iterator operator-(difference_type n) const {
                 return reverse_iterator(_currentPos + n);
             }
 
+            /*
+            ** @brief: Descreases the reverse_iterator by n element positions.
+            ** increases by n the base iterator kept by the object 
+            ** (as if applying operator+= to it).
+            */
             reverse_iterator &operator-=(difference_type n) {
                 _currentPos += n;
                 return *this;
             }
 
+            /*
+            ** @brief: Decreases the reverse_iterator by one position.
+            */
             reverse_iterator &operator--() {
                 ++_currentPos;
                 return *this;
             }
 
             reverse_iterator operator--(int) {
-                reverse_iterator temp(*this);
-                ++_currentPos;
+                reverse_iterator temp = *this;
+                --(*this);
                 return temp;
             }
     };
