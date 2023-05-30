@@ -9,14 +9,12 @@
 #include <sys/time.h>
 #include "containers/vector.hpp"
 #include <vector>
-// #define RNG    10000 + (std::rand() % 50000)
 
 template <typename T>
 void printVectorInfo(ft::vector<T> &vector) {
 	std::cout << "--------------------------------------------------" << std::endl << std::boolalpha
 	          << "vector::empty() = " << vector.empty() << std::endl
 	          << "vector::size() = " << vector.size() << std::endl
-	        //   << "vector::max_size() = " << vector.max_size() << std::endl
 	          << "Contents:" << std::endl;
 }
 
@@ -25,7 +23,6 @@ void printVectorInfo(std::vector<T> &vector) {
 	std::cout << "--------------------------------------------------" << std::endl << std::boolalpha
 	          << "vector::empty() = " << vector.empty() << std::endl
 	          << "vector::size() = " << vector.size() << std::endl
-	        //   << "vector::max_size() = " << vector.max_size() << std::endl
 	          << "Contents:" << std::endl;
 }
 
