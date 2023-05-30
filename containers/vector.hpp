@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/29 23:35:24 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/30 13:02:52 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <iostream>
 #include <memory>
 #include <exception>
-// #include <vector>
+#include <vector>
 #include "../tools/type_traits.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"
@@ -478,24 +478,27 @@ public:
     ** @param position The position where insert.
     ** @param n Amout of element to insert.
     ** @param val The element to insert.
+    ** 
     */
 
     void insert(iterator position, size_type n, const value_type& val) {
-        difference_type difference = position - this->begin();
-        size_type new_size = _size + n;
+    difference_type difference = position - this->begin();
+    size_type new_size = _size + n;
+    if (new_size > _capacity) {
+        this->reserve(std::max(_capacity * 2, new_size));
+    }
 
-        if (new_size > _capacity) {
-            this->reserve(std::max(_capacity * 2, new_size));
-        }
-
+    if (n > 0){
         pointer insert_pos = _data + difference;
 
         // Shift existing elements to make space for the new elements
-        for (pointer it = _data + _size - 1; it >= insert_pos; --it) {
-            _alloc.construct(it + n, *it);
-            _alloc.destroy(it);
+        if (difference < static_cast<difference_type>(_size)) {
+            // Move elements from the insert position onwards
+            for (pointer it = _data + _size - 1; it >= insert_pos; --it) {
+                _alloc.construct(it + n, *it);
+                _alloc.destroy(it);
+            }
         }
-
         // Construct new elements at the insert position
         for (size_type i = 0; i < n; ++i) {
             _alloc.construct(insert_pos + i, val);
@@ -503,6 +506,7 @@ public:
 
         _size = new_size;
     }
+}
 
     /*
     ** @brief Insert element in range from ["first" to
@@ -523,7 +527,14 @@ public:
     void insert(iterator position, Iterator first, Iterator last,
                 typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) {
         difference_type difference = position - this->begin();
-        size_type n = std::distance(first, last);
+        size_type n = 0;
+        Iterator it = first;
+
+        while (it != last) {
+            ++n;
+            ++it;
+        }
+
         size_type new_size = _size + n;
 
         if (new_size > _capacity) {
@@ -538,7 +549,7 @@ public:
         }
 
         // Copy inserted elements
-        Iterator it = first;
+        it = first;
         for (size_type i = static_cast<size_type>(difference); i < static_cast<size_type>(difference) + n; i++) {
             _alloc.construct(temp_data + i, *it++);
         }
@@ -586,7 +597,8 @@ public:
     ** @param last the last element in the range.
     ** @return An iterator that point to the first element
     ** after "last".
-    ** {1, 2, 3, 4, 5} -> {1, 2, 5}
+    ** {1, 2, 3, 4, 5, 6} -> {1, 2, 6}
+    ** first = 3 last = 6 begin = 1, end = null
     */
 
     iterator erase(iterator first, iterator last) {
@@ -594,7 +606,8 @@ public:
         for (iterator it = last; it != this->end(); ++it, ++first) {
             *first = *it;
         }
-        while (first != this->end()) {
+        iterator end_val = this->end();
+        while (first != end_val) {
             _alloc.destroy(_data + (_size - 1));
             --_size;
             ++first;

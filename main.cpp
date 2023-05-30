@@ -1,69 +1,92 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#include <vector>
 #include <stdlib.h>
+#include <iomanip>
+#include <cstdlib>
+#include <climits>
+#include <cfloat>
+#include <sys/time.h>
 #include "containers/vector.hpp"
-// #include 
-#define T_SIZE_TYPE typename ft::vector<T>::size_type
+#include <vector>
+// #define RNG    10000 + (std::rand() % 50000)
+
 template <typename T>
-void	printSize(ft::vector<T> const &vct, bool print_content = true)
-{
-	const T_SIZE_TYPE size = vct.size();
-	const T_SIZE_TYPE capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
+void printVectorInfo(ft::vector<T> &vector) {
+	std::cout << "--------------------------------------------------" << std::endl << std::boolalpha
+	          << "vector::empty() = " << vector.empty() << std::endl
+	          << "vector::size() = " << vector.size() << std::endl
+	        //   << "vector::max_size() = " << vector.max_size() << std::endl
+	          << "Contents:" << std::endl;
+}
 
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (print_content)
-	{
-		typename ft::vector<T>::const_iterator it = vct.begin();
-		typename ft::vector<T>::const_iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
+template <typename T>
+void printVectorInfo(std::vector<T> &vector) {
+	std::cout << "--------------------------------------------------" << std::endl << std::boolalpha
+	          << "vector::empty() = " << vector.empty() << std::endl
+	          << "vector::size() = " << vector.size() << std::endl
+	        //   << "vector::max_size() = " << vector.max_size() << std::endl
+	          << "Contents:" << std::endl;
+}
+
+template <typename T>
+void printByOperator(ft::vector<T> &vector) {
+	printVectorInfo(vector);
+	for (size_t i = 0; i < vector.size(); i++) {
+		std::cout << "vector[" << i << "] = " << vector[i] << std::endl;
 	}
-	std::cout << "###############################################" << std::endl;
 }
 
-
-void	checkErase(ft::vector<std::string> const &vct,
-					ft::vector<std::string>::const_iterator const &it)
-{
-	static int i = 0;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize(vct);
+template <typename T>
+void printByOperator(std::vector<T> &vector) {
+	printVectorInfo(vector);
+	for (size_t i = 0; i < vector.size(); i++) {
+		std::cout << "vector[" << i << "] = " << vector[i] << std::endl;
+	}
 }
 
-int		main(void)
-{
-	ft::vector<std::string> vct(10);
+void rangeInsert(ft::vector<std::string> &vector);
+void rangeInsert2(std::vector<std::string> &vector);
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = std::string((vct.size() - i), i + 65);
-	printSize(vct);
+int main() {
 
-	checkErase(vct, vct.erase(vct.begin() + 2));
 
-	checkErase(vct, vct.erase(vct.begin()));
-	checkErase(vct, vct.erase(vct.end() - 1));
+	{
+		ft::vector<std::string> test;
+		std::vector<std::string> test2;
+		rangeInsert(test);
+		rangeInsert2(test2);
+		printByOperator(test);
+		printByOperator(test2);
 
-	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
+	}
+	return 0;
+}
 
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
+void rangeInsert(ft::vector<std::string> &vector) {
+	vector.insert(vector.begin(), 3, "My");
+	vector.insert(vector.begin() + (vector.size() / 2), 5, "dentist");
+	vector.insert(vector.begin() + (vector.size() / 3), 0, "tells");
+	vector.insert(vector.begin() + (vector.size() / 4), 4, "me");
+	vector.insert(vector.begin() + (vector.size() / 5), 1, "that");
+	vector.insert(vector.begin() + (vector.size() - 1), 10, "chewing");
+	vector.insert(vector.end() - 1, 1, "bricks");
+	vector.insert(vector.end() - vector.size(), 5, "is very bad");
+	vector.insert(vector.end() - (vector.size() / 2), 0, "for your");
+	vector.insert(vector.end() - (vector.size() / 3), 8, "teeth");
+	vector.insert(vector.end() - (vector.size() / 4), 2, "😬");
+}
 
-	vct.push_back("ONE");
-	vct.push_back("TWO");
-	vct.push_back("THREE");
-	vct.push_back("FOUR");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.begin(), vct.end()));
-
-	return (0);
+void rangeInsert2(std::vector<std::string> &vector) {
+	vector.insert(vector.begin(), 3, "My");
+	vector.insert(vector.begin() + (vector.size() / 2), 5, "dentist");
+	vector.insert(vector.begin() + (vector.size() / 3), 0, "tells");
+	vector.insert(vector.begin() + (vector.size() / 4), 4, "me");
+	vector.insert(vector.begin() + (vector.size() / 5), 1, "that");
+	vector.insert(vector.begin() + (vector.size() - 1), 10, "chewing");
+	vector.insert(vector.end() - 1, 1, "bricks");
+	vector.insert(vector.end() - vector.size(), 5, "is very bad");
+	vector.insert(vector.end() - (vector.size() / 2), 0, "for your");
+	vector.insert(vector.end() - (vector.size() / 3), 8, "teeth");
+	vector.insert(vector.end() - (vector.size() / 4), 2, "😬");
 }
