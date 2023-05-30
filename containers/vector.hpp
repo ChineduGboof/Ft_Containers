@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/28 13:54:38 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:35:24 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <iostream>
 #include <memory>
 #include <exception>
-#include <vector>
+// #include <vector>
 #include "../tools/type_traits.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"
@@ -58,9 +58,7 @@ public:
     explicit vector (const allocator_type& alloc = allocator_type()):   _data(0),
                                                                         _alloc(alloc),
                                                                         _size(0), 
-                                                                        _capacity(0) {
-                                                                            std::cout << YELLOW << "vector default constructor called" << std::endl;
-                                                                        }
+                                                                        _capacity(0) {}
 
     /************************ FILL CONSTRUCTOR  ************************/
     explicit vector (size_type n, const value_type& val = value_type(),
@@ -68,7 +66,6 @@ public:
                                                                         _alloc(alloc),
                                                                         _size(n), 
                                                                         _capacity(n) {
-            std::cout << "vector fill constructor called" << std::endl;
             if (n > 0)
             {
                 _data = _alloc.allocate(_capacity);
