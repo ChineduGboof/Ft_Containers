@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/30 23:28:12 by gboof            ###   ########.fr       */
+/*   Updated: 2023/05/31 12:33:58 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define MAP_HPP
 
 #include <iostream>
-// #include <map>
+#include <map>
 #include "../tools/reverse_iterator.hpp"
 #include "../tools/lexicographical_compare.hpp"
 #include "../tools/pair.hpp"
@@ -41,12 +41,24 @@ class map {
     typedef typename allocator_type::const_pointer          const_pointer;
     typedef typename allocator_type::size_type              size_type;
     typedef typename allocator_type::difference_type        difference_type;
-    // typedef avl_tree<key_type, mapped_type,
-	// 	                 key_compare, allocator_type>       tree_type;
-	// typedef map_iterator<value_type, key_compare>           iterator;
-	// typedef const_map_iterator<value_type, key_compare>     const_iterator;
-    // typedef ft::reverse_iterator<iterator>                  reverse_iterator;
-    // typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
+    typedef avl_tree<key_type, mapped_type,
+		                 key_compare, allocator_type>       tree_type;
+	typedef map_iterator<value_type, key_compare>           iterator;
+	typedef const_map_iterator<value_type, key_compare>     const_iterator;
+    typedef ft::reverse_iterator<iterator>                  reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
+
+    class value_compare: public binary_function<value_type, value_type, bool> {
+            friend class map;
+        protected:
+            key_compare _comp;
+
+            value_compare(key_compare c);
+        public:
+            bool operator()(const value_type& x, const value_type& y) const {
+                return _comp(x.first, y.first);
+            }
+    };  // value_compare class
 
 
 };

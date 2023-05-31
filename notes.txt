@@ -25,3 +25,33 @@ terminator
 
 changes:
 reverse_iterator operator--(int)
+
+
+AVL Tree
+
+-1 => greater on the right side
+1 => greater on the left side
+0 => equal on both sides
+
+left side - right side
+
+Construct AVL tree by inserting the following data:
+
+14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20
+
+Solution: Arrange them starting from top to bottom, taking note of their height
+-> Height of a node with no connecting nodes(branch) under it is 0
+-> Add the heights of the sub branches and add 1 to get the height of the main branch
+-> subtract the heights to get the balance factor (subtract from left to right)
+-> Balance factor cannot be greater than 1 or less than -1
+-> When you the do a rotation, the median element will be the root
+
+                less then <---- ----> Greater than
+                             [14]
+
+                    [11]              [17]
+
+            [7]                                 [53]
+
+
+
