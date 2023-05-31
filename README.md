@@ -14,7 +14,12 @@ Explanation about Certain Technical Aspects of the Project:
 
 ## Further Studies
 - [Understanding C++ iterators](https://medium.com/@joao_vaz/c-iterators-and-implementing-your-own-custom-one-a-primer-72f1506e5d71)
-
+- [What Is An AVL Tree](https://www.geeksforgeeks.org/what-is-avl-tree-avl-tree-meaning/)
+- [Insertion In An AVL Tree](https://www.geeksforgeeks.org/insertion-in-an-avl-tree/)
+- [Deletion In An AVL Tree](https://www.geeksforgeeks.org/deletion-in-an-avl-tree/)
+- [Build A Custom Map](https://www.geeksforgeeks.org/build-a-custom-map-using-header-file-in-c/)
+- [CPlusPlus Reference Manual](https://cplusplus.com/reference/)
+- [CPP Reference Manual](https://en.cppreference.com/w/)
 
 ## FT_Containers Testers
 
