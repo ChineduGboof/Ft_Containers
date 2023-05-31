@@ -7,14 +7,14 @@ An AVL tree is a self-balancing binary search tree where the heights of the left
 ### 1. Balanced Structure
 An AVL tree ensures that the heights of its left and right subtrees are balanced, maintaining a maximum height difference of one. This balance prevents the tree from becoming skewed and guarantees efficient search operations. 
 
-![Balanced AVL Tree]
-
+### Balanced AVL Tree
+```
       20
      /  \
    10    30
   /  \     \
  5   15    35
-
+```
 
 ### 2. Faster Searching
 Due to their balanced structure, AVL trees provide faster searching compared to unbalanced binary search trees. The height of an AVL tree is logarithmic, resulting in faster lookup times when storing and retrieving key-value pairs.
@@ -22,10 +22,9 @@ Due to their balanced structure, AVL trees provide faster searching compared to 
 ### 3. Automatic Balancing
 When a new key-value pair is inserted into an AVL tree, the tree automatically rebalances itself through rotations. Rotations adjust the tree's structure to maintain balance, ensuring that operations remain efficient even after insertions or deletions.
 
-![Automatic Balancing]
-
+### Automatic Balancing
 Inserting a node with key 25:
-
+```
 Before Insertion          After Insertion
       20                         20
      /  \                       /  \
@@ -34,7 +33,7 @@ Before Insertion          After Insertion
  5   15    35               5   15    35
          /                        \
         25                        25
-
+```
 
 ### 4. Efficient Memory Usage
 The balanced nature of AVL trees guarantees that the height of the tree is logarithmic, resulting in efficient memory utilization. This is especially important when implementing maps or dictionaries where memory efficiency is a key consideration.
