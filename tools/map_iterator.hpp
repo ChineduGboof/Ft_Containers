@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_iterator.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 11:37:31 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/31 12:20:37 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/01 19:58:32 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define MAP_ITERATOR_HPP
 
 #include "iterator_traits.hpp"
+#include "avl_tree_node.hpp"
+#include "map_navigator.hpp"
 
 namespace ft {
 
@@ -27,9 +29,9 @@ namespace ft {
             typedef typename traits::pointer                                    pointer;
             typedef typename traits::reference                                  reference;
             typedef typename traits::iterator_category                          iterator_category;
-            typedef tree_node<value_type>                                       node_type;
+            typedef avlTreeNode<value_type>                                     node_type;
             typedef node_type*                                                  node_pointer;
-            typedef map_traverser<value_type, key_compare>                      node_finder;
+            typedef map_navigator<value_type, key_compare>                      node_finder;
 
         private:
             node_pointer _node;

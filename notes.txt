@@ -55,3 +55,8 @@ Solution: Arrange them starting from top to bottom, taking note of their height
 
 
 
+Sort out in Maps:
+
+map navigator
+
+map destructor

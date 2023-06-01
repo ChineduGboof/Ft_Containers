@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/31 12:33:58 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/01 19:54:24 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <map>
 #include "../tools/reverse_iterator.hpp"
+#include "../tools/map_iterator.hpp"
 #include "../tools/lexicographical_compare.hpp"
 #include "../tools/pair.hpp"
 
@@ -48,7 +49,7 @@ class map {
     typedef ft::reverse_iterator<iterator>                  reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
 
-    class value_compare: public binary_function<value_type, value_type, bool> {
+    class value_compare: public std::binary_function<value_type, value_type, bool> {
             friend class map;
         protected:
             key_compare _comp;
@@ -60,6 +61,98 @@ class map {
             }
     };  // value_compare class
 
+    private:
+		tree_type         _tree;
+		key_compare       _comp;
+		allocator_type    _alloc;
+		size_type         _size;
+
+    public:
+        /*
+        **  Constructs an empty container, with no elements.
+        */
+        explicit map (const key_compare& comp = key_compare(), 
+            const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc), _size() {}
+
+        /*
+        **  Constructs a container with as many elements as the range [first,last), 
+        **  with each element constructed from its corresponding element in that range.
+        */
+        template <class InputIterator>  map (InputIterator first, InputIterator last, 
+            const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+            : _comp(comp), _alloc(alloc), _size(0) {
+                this->insert(first, last);
+        }
+
+        /*
+        **  Constructs a container with a copy of each of the elements in x.
+        */
+        map (const map& x): _comp(x._comp), _alloc(x._alloc), _size() {
+            this->insert(x.begin(), x.end());
+        }
+
+        /*
+        **  Assigns new contents to the container, replacing its current content.
+        **  Copies all the elements from x into the container, changing its size accordingly.
+        */
+        map& operator= (const map& x) {
+            if (this != &x){
+                _comp = x._comp;
+                _alloc = x._alloc;
+            }
+            this->insert(x.begin(), x.end());
+            return *this;
+        }
+
+        /*
+        **  Destroys the container object.
+        */
+        ~map(){}
+        
+        /************************ ALLOCATOR ************************/
+        /*
+        **  Returns a copy of the allocator object associated with the map.
+        */
+        allocator_type get_allocator() const{
+            return _alloc;
+        }
+
+        /************************ ACCESS ELEMENT ************************/
+        /*
+        **  If k matches the key of an element in the container, 
+        **  the function returns a reference to its mapped value.
+        **  If k does not match the key of any element in the container, 
+        **  the function inserts a new element with that key 
+        **  and returns a reference to its mapped value. 
+        */
+        mapped_type& operator[] (const key_type& k){
+            return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
+        }
+
+
+        /*
+        **  Returns an iterator referring to the first element in the map container.
+        */
+        iterator begin(){}
+        
+        const_iterator begin() const {}
+
+
+        reverse_iterator rbegin() {
+			return reverse_iterator(this->end());
+		}
+
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(this->end());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(this->begin());
+		}
+
+		const_reverse_iterator rend() const {
+			return const_reverse_iterator(this->begin());
+		}
 
 };
 
