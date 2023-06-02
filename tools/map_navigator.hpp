@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:45:55 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/01 19:59:40 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/02 17:16:53 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ public:
 
     ~map_navigator() {}
 
-    node_pointer get_successor_node(node_pointer root, node_pointer node) {
+    node_pointer getSuccessor(node_pointer root, node_pointer node) {
         if (node == _end_node || !node) {
             return _end_node;
         } else if (node->right) {
@@ -67,7 +67,7 @@ public:
         return successor;
     }
 
-    node_pointer get_predecessor_node(node_pointer root, node_pointer node) {
+    node_pointer getPredecessor(node_pointer root, node_pointer node) {
         if (!node) {
             return _end_node;
         } else if (node == _end_node) {

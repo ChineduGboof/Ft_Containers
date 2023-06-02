@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 11:37:31 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/01 19:58:32 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/02 17:16:13 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,96 @@ namespace ft {
         
         public:
             map_iterator() : _node(), _root(), _sentinel(), _comp(), _find() {}
+
+            map_iterator(node_pointer node, node_pointer root, node_pointer sentinel,
+		             const key_compare &comp = key_compare()) 
+                     : _node(node), _root(root), _sentinel(sentinel), _comp(comp), 
+                        _find(_node, _root, _sentinel, _comp) {}
+
+            map_iterator(const map_iterator &other) 
+                : _node(other._node), _root(other._root), _sentinel(other._sentinel),
+                    _comp(other._comp), _find(_node, _root, _sentinel, _comp) {}
+
+            map_iterator &operator=(const map_iterator &other) {
+                if (this != &other) {
+                    _node = other._node;
+                    _root = other._root;
+                    _sentinel = other._sentinel;
+                    _comp = other._comp;
+                    _find = node_finder(_node, _root, _sentinel, _comp);
+                }
+                return *this;
+            }
+
+            ~map_iterator() {}
+
+            // Returns a reference to the value stored in the current node.
+            reference operator*() const {
+                return _node->value;
+            }
+
+            // Returns a pointer to the value stored in the current node. 
+            // If the current node is NULL, returns a pointer to the value of the sentinel node.
+            pointer operator->() const {
+                return _node ? &_node->value : &_sentinel->value;
+            }
+
+            // Returns the pointer to the current node.
+            node_pointer base() const {
+                return _node;
+            }
+
+            // Returns the pointer to the root node of the AVL tree.
+            node_pointer getRoot() const {
+                return _root;
+            }
+
+            // Returns the pointer to the sentinel node of the AVL tree.
+            node_pointer getSentinel() const {
+                return _sentinel;
+            }
+
+            // Returns the key comparison functor used for comparing keys in the AVL tree.
+            key_compare getComp() const {
+                return _comp;
+            }
+
+            // Prefix increment operator (++iterator). 
+            // Moves the iterator to the next node in the AVL tree.
+            map_iterator &operator++() {
+                _node = _find.getSuccessor(_root, _node);
+                return *this;
+            }
+
+            // Postfix increment operator (iterator++). 
+            // Moves the iterator to the next node in the AVL tree 
+            // and returns a copy of the iterator before the increment.
+            map_iterator operator++(int) {
+                map_iterator temp = *this;
+                ++(*this);
+                return temp;
+            }
+
+            // Prefix decrement operator (--iterator). 
+            // Moves the iterator to the previous node in the AVL tree.
+            map_iterator &operator--() {
+                _node = _find.getPredecessor(_root, _node);
+                return *this;
+            }
+
+            // Postfix decrement operator (iterator--). 
+            // Moves the iterator to the previous node in the AVL tree 
+            // and returns a copy of the iterator before the decrement.
+            map_iterator operator--(int) {
+                map_iterator temp = *this;
+                --(*this);
+                return temp;
+            }
+
+
+
+
+
 
     };  //map_iterator
 
