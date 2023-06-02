@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/01 19:54:24 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/02 10:40:10 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "../tools/map_iterator.hpp"
 #include "../tools/lexicographical_compare.hpp"
 #include "../tools/pair.hpp"
+#include "../tools/equal.hpp"
+#include "../tools/avl_tree.hpp"
 
 /*
 For map I mostly just followed the geeksforgeeks implementation. 

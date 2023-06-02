@@ -6,16 +6,17 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 14:00:55 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/30 23:13:32 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/02 10:42:31 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PAIR_HPP
 #define PAIR_HPP
 #include <map>
+
 namespace ft {
 
-template <class T1, class T2> struct pair{
+template <class T1, class T2> struct pair {
 	typedef T1 first_type;
 	typedef T2 second_type;
 
