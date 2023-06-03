@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:45:55 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/02 17:16:53 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/03 20:15:30 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,16 @@ public:
 
     ~map_navigator() {}
 
+    /**
+        Retrieves the successor node of the given node in the binary search tree.
+        The successor node is the node with the smallest key greater than the given node's key.
+        If the given node is the last node or is null, returns the sentinel node.
+        If the given node has a right child, returns the minimum node in the right subtree.
+        Otherwise, traverses the tree from the root to find the successor node.
+        @param root The root node of the binary search tree.
+        @param node The node for which to find the successor.
+        @return Pointer to the successor node.
+    */
     node_pointer getSuccessor(node_pointer root, node_pointer node) {
         if (node == _end_node || !node) {
             return _end_node;
@@ -67,6 +77,17 @@ public:
         return successor;
     }
 
+    /**
+        Retrieves the predecessor node of the given node in the binary search tree.
+        The predecessor node is the node with the largest key smaller than the given node's key.
+        If the given node is null, returns the sentinel node.
+        If the given node is the sentinel node, returns the maximum node in the tree.
+        If the given node has a left child, returns the maximum node in the left subtree.
+        Otherwise, traverses the tree from the root to find the predecessor node.
+        @param root The root node of the binary search tree.
+        @param node The node for which to find the predecessor.
+        @return Pointer to the predecessor node.
+    */
     node_pointer getPredecessor(node_pointer root, node_pointer node) {
         if (!node) {
             return _end_node;
@@ -90,6 +111,12 @@ public:
         return predecessor;
     }
 
+    /**
+        Retrieves the node with the minimum key in the given subtree.
+        Traverses the left child of each node until a node with no left child is found.
+        @param node The root node of the subtree.
+        @return Pointer to the node with the minimum key.
+    */
     node_pointer get_minimum_node(node_pointer node) {
         node_pointer min_node = node;
         while (min_node->left) {
@@ -98,6 +125,12 @@ public:
         return min_node;
     }
 
+    /**
+        Retrieves the node with the maximum key in the given subtree.
+        Traverses the right child of each node until a node with no right child is found.
+        @param node The root node of the subtree.
+        @return Pointer to the node with the maximum key.
+    */
     node_pointer get_maximum_node(node_pointer node) {
         node_pointer max_node = node;
         while (max_node->right) {

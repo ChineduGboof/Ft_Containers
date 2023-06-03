@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 11:37:31 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/03 18:54:36 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/04 00:09:03 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,39 @@ namespace ft {
         private:
             node_pointer _node;
             node_pointer _root;
-            node_pointer _sentinel;
+            node_pointer _end_node;
             key_compare _comp;
             node_finder _find; 
         
         public:
-            map_iterator() : _node(), _root(), _sentinel(), _comp(), _find() {}
+            map_iterator() : _node(), _root(), _end_node(), _comp(), _find() {}
 
-            map_iterator(node_pointer node, node_pointer root, node_pointer sentinel,
+            /**
+                Constructs a map iterator with the specified parameters.
+                @param node Pointer to the current node the iterator is pointing to.
+                @param root Pointer to the root node of the map.
+                @param end_node Pointer to the end node of the map.
+                @param comp Key comparison function used for comparing keys in the map.
+                The constructor initializes the map iterator with the given node, root, and end node,
+                along with the specified key comparison function. It also initializes the find member,
+                which is responsible for finding the next valid node during iteration.
+            */
+            map_iterator(node_pointer node, node_pointer root, node_pointer end_node,
 		             const key_compare &comp = key_compare()) 
-                     : _node(node), _root(root), _sentinel(sentinel), _comp(comp), 
-                        _find(_node, _root, _sentinel, _comp) {}
+                     : _node(node), _root(root), _end_node(end_node), _comp(comp), 
+                        _find(_node, _root, _end_node, _comp) {}
 
             map_iterator(const map_iterator &other) 
-                : _node(other._node), _root(other._root), _sentinel(other._sentinel),
-                    _comp(other._comp), _find(_node, _root, _sentinel, _comp) {}
+                : _node(other._node), _root(other._root), _end_node(other._end_node),
+                    _comp(other._comp), _find(_node, _root, _end_node, _comp) {}
 
             map_iterator &operator=(const map_iterator &other) {
                 if (this != &other) {
                     _node = other._node;
                     _root = other._root;
-                    _sentinel = other._sentinel;
+                    _end_node = other._end_node;
                     _comp = other._comp;
-                    _find = node_finder(_node, _root, _sentinel, _comp);
+                    _find = node_finder(_node, _root, _end_node, _comp);
                 }
                 return *this;
             }
@@ -72,9 +82,9 @@ namespace ft {
             }
 
             // Returns a pointer to the value stored in the current node. 
-            // If the current node is NULL, returns a pointer to the value of the sentinel node.
+            // If the current node is NULL, returns a pointer to the value of the end_node node.
             pointer operator->() const {
-                return _node ? &_node->value : &_sentinel->value;
+                return _node ? &_node->value : &_end_node->value;
             }
 
             // Returns the pointer to the current node.
@@ -87,9 +97,9 @@ namespace ft {
                 return _root;
             }
 
-            // Returns the pointer to the sentinel node of the AVL tree.
-            node_pointer getSentinel() const {
-                return _sentinel;
+            // Returns the pointer to the end_node node of the AVL tree.
+            node_pointer getEndNode() const {
+                return _end_node;
             }
 
             // Returns the key comparison functor used for comparing keys in the AVL tree.
@@ -162,43 +172,43 @@ class const_map_iterator : public ft::iterator<std::bidirectional_iterator_tag, 
 	private:
 		node_pointer _node;
 		node_pointer _root;
-		node_pointer _sentinel;
+		node_pointer _end_node;
 		key_compare _comp;
 		node_finder _find;
 
 	public:
 		const_map_iterator() : _node(),
 		                       _root(),
-		                       _sentinel(),
+		                       _end_node(),
 		                       _comp(),
 		                       _find() {}
 
-		const_map_iterator(const node_pointer node, node_pointer root, node_pointer sentinel,
+		const_map_iterator(const node_pointer node, node_pointer root, node_pointer end_node,
 		                   const key_compare &comp = key_compare()) : _node(node),
 		                                                              _root(root),
-		                                                              _sentinel(sentinel),
+		                                                              _end_node(end_node),
 		                                                              _comp(comp),
-		                                                              _find(_node, _root, _sentinel, _comp) {}
+		                                                              _find(_node, _root, _end_node, _comp) {}
 
 		const_map_iterator(const iterator &other) : _node(other.base()),
 		                                            _root(other.getRoot()),
-		                                            _sentinel(other.getSentinel()),
+		                                            _end_node(other.getEndNode()),
 		                                            _comp(other.getComp()),
-		                                            _find(_node, _root, _sentinel, _comp) {}
+		                                            _find(_node, _root, _end_node, _comp) {}
 
 		const_map_iterator(const const_map_iterator &other) : _node(other._node),
 		                                                      _root(other._root),
-		                                                      _sentinel(other._sentinel),
+		                                                      _end_node(other._end_node),
 		                                                      _comp(other._comp),
-		                                                      _find(_node, _root, _sentinel, _comp) {}
+		                                                      _find(_node, _root, _end_node, _comp) {}
 
 		const_map_iterator &operator=(const const_map_iterator &other) {
 			if (this != &other) {
 				_node = other._node;
 				_root = other._root;
-				_sentinel = other._sentinel;
+				_end_node = other._end_node;
 				_comp = other._comp;
-				_find = node_finder(_node, _root, _sentinel, _comp);
+				_find = node_finder(_node, _root, _end_node, _comp);
 			}
 			return *this;
 		}
@@ -210,7 +220,7 @@ class const_map_iterator : public ft::iterator<std::bidirectional_iterator_tag, 
 		}
 
 		pointer operator->() const {
-			return _node ? &_node->value : &_sentinel->value;
+			return _node ? &_node->value : &_end_node->value;
 		}
 
 		node_pointer base() const {

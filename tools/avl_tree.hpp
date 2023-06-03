@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:37:38 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/02 14:41:20 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/03 20:20:33 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class avl_tree {
         /*
         **  Returns a constant pointer to the end node of the AVL tree.
         */
-        pointer getend_node() const {
+        pointer getEndNode() const {
 			return _end_node;
 		}
 

@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/03 18:55:20 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/04 01:19:13 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,18 @@ class map {
     typedef ft::reverse_iterator<iterator>                  reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
 
+    /**
+        Custom comparator class for comparing the values of key-value pairs in a map.
+        Inherits from std::binary_function and provides an operator() for comparing values.
+        the friend keyword is used to grant access to private or protected members of a class 
+        to another class or function. When a class or function is declared as a friend 
+        of another class, it can access the private and protected members of that class 
+        as if it were a member of that class itself.
+        his means that the map class has access to the 
+        private and protected members of the value_compare class.
+        This allows the map class to create instances of the value_compare class 
+        and use its private member _comp for value comparison.
+    */
     class value_compare: public std::binary_function<value_type, value_type, bool> {
             friend class map;
         protected:
@@ -109,17 +121,99 @@ class map {
         /*
         **  Destroys the container object.
         */
-        ~map(){}
+        ~map(){ 
+            _tree.clear(_tree.getRoot(), true);
+        }
         
-        /************************ ALLOCATOR ************************/
+        /************************ ITERATORS ************************/
         /*
-        **  Returns a copy of the allocator object associated with the map.
+        **  the begin() function returns an iterator that points to the first element in the map. 
+        **  If the map is empty, it returns an iterator pointing to the end Node. 
+        **  If the map is not empty, it returns an iterator pointing 
+        **  to the element with the smallest key in the map.
+        **  If the container is empty, the returned iterator value shall not be dereferenced.
         */
-        allocator_type get_allocator() const{
-            return _alloc;
+        iterator begin() {
+            if (!_tree.getRoot()) {
+                return iterator(_tree.getEndNode(), _tree.getRoot(), _tree.getEndNode());
+            } else {
+                return iterator(_tree.getMinimum(_tree.getRoot()), _tree.getRoot(), _tree.getEndNode());
+            }
         }
 
-        /************************ ACCESS ELEMENT ************************/
+        const_iterator begin() const {
+            if (!_tree.getRoot()) {
+                return const_iterator(_tree.getEndNode(), _tree.getRoot(), _tree.getEndNode());
+            } else {
+                return const_iterator(_tree.getMinimum(_tree.getRoot()), _tree.getRoot(), _tree.getEndNode());
+            }
+        }
+
+        /**
+            Returns an iterator representing the end of the map.
+            The end iterator points to a special sentinel node that indicates the end of the map.
+            It is constructed using the end node, root node, and the sentinel node of the map.
+        */
+        iterator end() {
+			return iterator(_tree.getEndNode(), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		const_iterator end() const {
+			return const_iterator(_tree.getEndNode(), _tree.getRoot(), _tree.getEndNode());
+		}
+
+        /**
+            Returns a reverse iterator pointing to the last element of the map.
+            It is constructed by calling the end() function to get the end iterator, and then constructing a reverse iterator from it.
+        */
+        reverse_iterator rbegin() {
+			return reverse_iterator(this->end());
+		}
+
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(this->end());
+		}
+
+        /**
+            Returns a reverse iterator pointing to the theoretical element 
+            preceding the first element of the map.
+            It is constructed by calling the begin() function to get the 
+            begin iterator, and then constructing a reverse iterator from it.
+        */
+		reverse_iterator rend() {
+			return reverse_iterator(this->begin());
+		}
+
+		const_reverse_iterator rend() const {
+			return const_reverse_iterator(this->begin());
+		}
+
+        /************************ CAPACITY ************************/
+        /*
+        ** @brief Returns whether the container is empty.
+        ** Does not modify container in any way.
+        ** @return true if the container size is 0, false otherwise.
+        */
+        bool empty() const {
+			return _size == 0;
+		}
+
+        /**
+            @brief return the number of elements in the container.
+            @return the number of elements.
+        */
+		size_type size() const {
+			return _size;
+		}
+
+        /**
+         * Returns the maximum number of elements that the map can hold.
+        */
+		size_type max_size() const {
+			return _tree.max_size();
+		}
+
+        /************************ ELEMENT ACCESS ************************/
         /*
         **  If k matches the key of an element in the container, 
         **  the function returns a reference to its mapped value.
@@ -132,29 +226,21 @@ class map {
         }
 
 
-        /*
-        **  Returns an iterator referring to the first element in the map container.
-        */
-        iterator begin(){}
+        /************************ MODIFIERS ************************/
+
+        pair<iterator,bool> insert (const value_type& val);
+
+
         
-        const_iterator begin() const {}
+        /************************ ALLOCATOR ************************/
+        /*
+        **  Returns a copy of the allocator object associated with the map.
+        */
+        allocator_type get_allocator() const{
+            return _alloc;
+        }
 
 
-        reverse_iterator rbegin() {
-			return reverse_iterator(this->end());
-		}
-
-		const_reverse_iterator rbegin() const {
-			return const_reverse_iterator(this->end());
-		}
-
-		reverse_iterator rend() {
-			return reverse_iterator(this->begin());
-		}
-
-		const_reverse_iterator rend() const {
-			return const_reverse_iterator(this->begin());
-		}
 
 };
 
