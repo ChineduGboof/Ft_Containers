@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 01:19:13 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/04 16:16:39 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,10 +228,199 @@ class map {
 
         /************************ MODIFIERS ************************/
 
-        pair<iterator,bool> insert (const value_type& val);
+        /**
+         * Inserts a key-value pair into the map.
+         * @param val The key-value pair to be inserted.
+         * @return A pair consisting of an iterator to the inserted element and a boolean value.
+         *         The iterator points to the inserted element if the insertion is successful,
+         *         or to the existing element if the key already exists.
+         *         The boolean value is true if the insertion is successful, false otherwise.
+         * Check if the element already exists in the map. If it doesnt, it will return the endNode
+         * Insert the new element into the map and update the root
+         * Return an iterator to the inserted element and true to indicate successful insertion
+         */
+        ft::pair<iterator, bool> insert(const value_type& val) {
+            iterator existing = this->find(val.first);
+            if (existing != end()) {
+                return ft::make_pair(existing, false);
+            }
+            _tree.updateRoot(_tree.insertNode(_tree.getRoot(), val));
+            _size++;
+            return ft::make_pair(this->find(val.first), true);
+        }
 
+        /**
+            Inserts a key-value pair into the map at the specified position.
+            The position parameter is ignored in this implementation.
+            The function first calls the insert function to insert the element into the map.
+            Then, it returns an iterator to the element with the specified key, using the find function.
+            @param position An iterator pointing to the position where the element should be inserted (ignored).
+            @param val The key-value pair to be inserted.
+            @return An iterator to the inserted element or to the element with the equivalent key.
+        */
+        iterator insert (iterator position, const value_type& val) {
+            (void)position;
+            this->insert(val);
+            return this->find(val.first);
+        }
 
+        /**
+            Inserts a range of elements into the map.
+            The function iterates over the range defined by the input iterators, calling the insert function for each element.
+            It uses the first and last iterators to determine the range of elements to be inserted.
+            @tparam InputIterator The type of the input iterators representing the range of elements.
+            @param first An input iterator pointing to the first element in the range.
+            @param last An input iterator pointing to the element one past the last element in the range.
+            @note The range is defined as [first, last), where 'first' is included and 'last' is excluded.
+            @note The elements are inserted in the order they appear in the range.
+        */
+        template <class InputIterator>  void insert (InputIterator first, InputIterator last) {
+            while ( first != last) {
+                this->insert(*first);
+                first++;
+            }
+        }
+
+        /**
+         * Erases the element at the specified position in the map.
+         * @param position An iterator pointing to the element to be removed.
+         * @note The iterator must be valid and dereferenceable.
+         * @note After erasing the element, the iterator becomes invalid.
+         * Handle the case where the iterator points to the end() position
+         * Delete the node containing the element from the underlying tree
+         */
+        void erase (iterator position)
+			{ this->erase(*position); }
+
+        /**
+         * Erases all elements with the specified key from the map.
+         * @param k The key of the element(s) to be removed.
+         * @return The number of elements erased (0 or 1, since the map contains unique keys).
+         * @note This function removes all elements with the specified key from the map.
+         *       It first checks if the key exists in the map by using find(k).base().
+         *       If the key is found (i.e., the iterator is not pointing to the end() position),
+         *       it calls the erase(iterator position) function with the iterator returned by find(k)
+         *       to remove the element.
+        */
+        size_type erase(const key_type &k) {
+            if (this->find(k).base() != _tree.getEndNode()) {
+                this->erase(this->find(k));
+                return 1;
+            }
+            return 0;
+        }
+
+        /**
+         * Erases a range of elements from the map.
+         * @param first An iterator pointing to the first element of the range to be removed.
+         * @param last An iterator pointing to the element one past the last element of the range to be removed.
+         * @note The range is defined as [first, last), where 'first' is included and 'last' is excluded.
+         * @note After erasing the elements, the iterators in the range become invalid.
+        */
+       	void erase (iterator first, iterator last)
+        {
+            while (first != last)
+                this->erase(*(first++));
+        }
+
+        /**
+            Swaps the contents of this map with another map.
+            The internal data members, including the underlying tree, key comparator,
+            allocator, and size, are exchanged between the two maps.
+            This operation effectively swaps the entire state of the maps,
+            providing a fast way to exchange their contents.
+            @param x The map to swap the contents with.
+        */
+        void swap(map &x) {
+			tree_type temp_tree = _tree;
+			key_compare temp_comp = _comp;
+			allocator_type temp_alloc = _alloc;
+			size_type temp_size = _size;
+
+			_tree = x._tree;
+			_comp = x._comp;
+			_alloc = x._alloc;
+			_size = x._size;
+
+			x._tree = temp_tree;
+			x._comp = temp_comp;
+			x._alloc = temp_alloc;
+			x._size = temp_size;
+		}
         
+        /**
+            Clears the map, removing all elements.
+            It calls the clear() function on the underlying tree to remove all nodes.
+            After clearing the map, the size is set to 0.
+        */
+        void clear() {
+            _tree.clear(_tree.getRoot(), false);
+            _size = 0;
+        }
+
+        /************************ OBSERVERS ************************/
+        /**
+            Returns a copy of the key comparison object used by the map container.
+            The key comparison object determines the order of the elements based on their keys.
+            It is a function pointer or function object that compares two keys and returns true
+            if the first key is considered to go before the second key.
+        */
+        key_compare key_comp() const{
+            return _comp;
+        }
+
+        /**
+            Returns a copy of the value comparison object used by the map container.
+            The value comparison object is derived from the key comparison object.
+            It is used to compare two elements to determine whether the key of the first element
+            goes before the key of the second element. The mapped_type part of the value is not
+            taken into consideration in this comparison.
+        */
+        value_compare value_comp() const{
+            return value_compare(this->key_comp());
+        }
+
+        /************************ OPERATIONS ************************/
+
+        		size_type count(const key_type &k) const {
+			return this->find(k).base() == _tree.getEndNode() ? 0 : 1;
+		}
+
+		iterator find(const key_type &k) {
+			return iterator(_tree.search(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		const_iterator find(const key_type &k) const {
+			return const_iterator(_tree.search(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		iterator lower_bound(const key_type &k) {
+			return this->find(k).base() != _tree.getEndNode() ? this->find(k) :
+			       iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		const_iterator lower_bound(const key_type &k) const {
+			return this->find(k).base() != _tree.getEndNode() ? this->find(k) :
+			       const_iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		iterator upper_bound(const key_type &k) {
+			return iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		const_iterator upper_bound(const key_type &k) const {
+			return const_iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
+		}
+
+		ft::pair<iterator, iterator> equal_range(const key_type &k) {
+			return ft::make_pair(this->lower_bound(k), this->upper_bound(k));
+		}
+
+		ft::pair<const_iterator, const_iterator> equal_range(const key_type &k) const {
+			return ft::make_pair(this->lower_bound(k), this->upper_bound(k));
+		}
+
+
         /************************ ALLOCATOR ************************/
         /*
         **  Returns a copy of the allocator object associated with the map.
@@ -240,9 +429,42 @@ class map {
             return _alloc;
         }
 
+};  // map class
 
+template <class Key, class T, class Compare, class Allocator>
+bool operator==(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
 
-};
+template <class Key, class T, class Compare, class Allocator>
+bool operator!=(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return !(lhs == rhs);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator<(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator<=(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return !(rhs < lhs);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator>(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return rhs < lhs;
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator>=(const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
+	return !(lhs < rhs);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+void swap(ft::map<Key, T, Compare, Allocator> &lhs, ft::map<Key, T, Compare, Allocator> &rhs) {
+	lhs.swap(rhs);
+}
 
 }   // namespace ft
 #endif

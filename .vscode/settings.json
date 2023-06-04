@@ -75,6 +75,7 @@
         "iomanip": "cpp",
         "list": "cpp",
         "queue": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "__availability": "cpp"
     }
 }
