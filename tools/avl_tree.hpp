@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 10:37:38 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/03 20:20:33 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/04 21:24:47 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "pair.hpp"
 #include "map_iterator.hpp"
+#include "map_navigator.hpp"
 
 namespace ft {
 template <class Key, class T, class Compare = std::less<Key>,

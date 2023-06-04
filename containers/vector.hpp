@@ -3,25 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/30 13:02:52 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/04 21:00:25 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#define DEFAULT		"\033[0m"
-#define RED			"\033[0;31m"
-#define GREEN		"\033[0;32m"
-#define YELLOW		"\033[0;33m"
-
 #include <iostream>
 #include <memory>
 #include <exception>
-#include <vector>
+// #include <vector>
 #include "../tools/type_traits.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"

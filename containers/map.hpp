@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 16:16:39 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/04 21:22:15 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,15 @@
 #define MAP_HPP
 
 #include <iostream>
-#include <map>
 #include "../tools/reverse_iterator.hpp"
-#include "../tools/map_iterator.hpp"
+// #include <map>
+// #include "../tools/map_iterator.hpp"
+// #include "../tools/pair.hpp"
 #include "../tools/lexicographical_compare.hpp"
-#include "../tools/pair.hpp"
 #include "../tools/equal.hpp"
 #include "../tools/avl_tree.hpp"
+#include "stack.hpp"
 
-/*
-For map I mostly just followed the geeksforgeeks implementation. 
-It should give you a good foundation on the container. 
-I spent most of my time in iterators and erase for map
-*/
 
 namespace ft {
 
@@ -382,9 +378,19 @@ class map {
 
         /************************ OPERATIONS ************************/
 
-        		size_type count(const key_type &k) const {
-			return this->find(k).base() == _tree.getEndNode() ? 0 : 1;
-		}
+        /**
+            Find function
+            Searches for the element with the specified key in the map.
+            @param k The key value to search for.
+            @return An iterator pointing to the found element, or an iterator pointing to the end position if the key is not found.
+            Algorithm:
+            Call the search function on the underlying tree, passing the root node and the key value.
+            Construct and return an iterator using the returned node, the root node of the tree, and the end node.
+            This allows users to efficiently find elements in the map using their keys.
+            if the search function returns a null pointer, 
+            the iterator constructed with it will be pointing to the end position of the map
+            iterator(node, root, endnode)
+        */
 
 		iterator find(const key_type &k) {
 			return iterator(_tree.search(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
@@ -393,6 +399,35 @@ class map {
 		const_iterator find(const key_type &k) const {
 			return const_iterator(_tree.search(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
 		}
+        
+        /**
+         * Count function
+         * Returns the number of elements with the specified key in the map.
+         * @param k The key value to count.
+         * @return The number of elements with the specified key (0 or 1, since the map contains unique keys).
+         * Algorithm:
+         * Call the find function to search for the specified key in the map.
+         * If the find function returns an iterator pointing to the end position, return 0.
+         * Otherwise, return 1.
+         * This function provides a convenient way to check the existence of a key in the map and count its occurrences.
+         * The base() converts the iterator output of find() to a point that can be used in == comparison
+        */
+
+        size_type count(const key_type &k) const {
+			return this->find(k).base() == _tree.getEndNode() ? 0 : 1;
+		}
+
+        /**
+         * Lower bound function
+         * Returns an iterator pointing to the first element that is not less than the specified key.
+         * @param k The key value to compare against.
+         * @return An iterator pointing to the first element not less than the specified key.
+         * Algorithm:
+         * Call the find function to search for the specified key in the map.
+         * If the find function returns an iterator pointing to the end position, return an iterator pointing to the successor key.
+         * Otherwise, return the found iterator.
+         * This function provides a way to efficiently find the lower bound position for a given key in the map.
+        */
 
 		iterator lower_bound(const key_type &k) {
 			return this->find(k).base() != _tree.getEndNode() ? this->find(k) :
@@ -404,6 +439,16 @@ class map {
 			       const_iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
 		}
 
+        /**
+         * Upper bound function
+         * Returns an iterator pointing to the first element that is greater than the specified key.
+         * @param k The key value to compare against.
+         * @return An iterator pointing to the first element greater than the specified key.
+         * Algorithm:
+         * Call the getKeySuccessor function on the underlying tree, passing the root node and the key value.
+         * Construct and return an iterator using the returned successor key and the root and end nodes of the tree.
+         * This function allows users to efficiently find the upper bound position for a given key in the map.
+         */
 		iterator upper_bound(const key_type &k) {
 			return iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
 		}
@@ -412,6 +457,16 @@ class map {
 			return const_iterator(_tree.getKeySuccessor(_tree.getRoot(), k), _tree.getRoot(), _tree.getEndNode());
 		}
 
+        /**
+         * Equal range function
+         * Returns a pair of iterators representing the range of elements with the specified key.
+         * @param k The key value to compare against.
+         * @return A pair of iterators representing the range of elements with the specified key.
+         * Algorithm:
+         * Call the lower_bound and upper_bound functions to find the lower bound and upper bound positions for the specified key.
+         * Create a pair using the lower bound and upper bound iterators and return it.
+         * This function provides a convenient way to obtain the range of elements with a given key in the map.
+        */
 		ft::pair<iterator, iterator> equal_range(const key_type &k) {
 			return ft::make_pair(this->lower_bound(k), this->upper_bound(k));
 		}

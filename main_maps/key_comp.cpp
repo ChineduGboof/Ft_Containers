@@ -1,27 +1,25 @@
-// map::key_comp
 #include <iostream>
 #include <map>
 
-int main ()
-{
-  std::map<char,int> mymap;
+int main() {
+    std::map<char, int> mymap;
 
-  std::map<char,int>::key_compare mycomp = mymap.key_comp();
+    mymap['x'] = 1001;
+    mymap['y'] = 2002;
+    mymap['z'] = 3003;
 
-  mymap['a']=100;
-  mymap['b']=200;
-  mymap['c']=300;
+    std::map<char, int>::iterator firstElement = mymap.begin();        // Iterator to the first element
+    std::map<char, int>::reverse_iterator lastElement = mymap.rbegin(); // Reverse iterator to the last element
 
-  std::cout << "mymap contains:\n";
+    bool isFirstKeyLess = mymap.key_comp()(firstElement->first, lastElement->first);
 
-  char highest = mymap.rbegin()->first;     // key value of last element
+    std::cout << "The key of the first element ('" << firstElement->first << "') is ";
 
-  std::map<char,int>::iterator it = mymap.begin();
-  do {
-    std::cout << it->first << " => " << it->second << '\n';
-  } while ( mycomp((*it++).first, highest) );
+    if (isFirstKeyLess) {
+        std::cout << "less than the key of the last element ('" << lastElement->first << "')." << std::endl;
+    } else {
+        std::cout << "not less than the key of the last element ('" << lastElement->first << "')." << std::endl;
+    }
 
-  std::cout << '\n';
-
-  return 0;
+    return 0;
 }
