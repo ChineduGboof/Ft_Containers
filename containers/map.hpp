@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 21:22:15 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/05 20:08:19 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 
 #include <iostream>
 #include "../tools/reverse_iterator.hpp"
-// #include <map>
-// #include "../tools/map_iterator.hpp"
-// #include "../tools/pair.hpp"
 #include "../tools/lexicographical_compare.hpp"
 #include "../tools/equal.hpp"
 #include "../tools/avl_tree.hpp"
 #include "stack.hpp"
+// #include <map>
+// #include "../tools/map_iterator.hpp"
+// #include "../tools/map_navigator.hpp"
+// #include "../tools/avl_tree_node.hpp"
+// #include "../tools/pair.hpp"
+// #include "../tools/equal.hpp"
 
 
 namespace ft {
@@ -29,23 +32,24 @@ namespace ft {
 template < class Key, class T, class Compare = std::less<Key>,  
             class Allocator = std::allocator<ft::pair<const Key,T> > > 
 class map {
-    typedef Key                                             key_type;
-    typedef T                                               mapped_type;
-    typedef ft::pair<const key_type, mapped_type>           value_type;
-    typedef Compare                                         key_compare;
-    typedef Allocator                                       allocator_type;
-    typedef typename allocator_type::reference              reference;
-    typedef typename allocator_type::const_reference        const_reference;
-    typedef typename allocator_type::pointer                pointer;
-    typedef typename allocator_type::const_pointer          const_pointer;
-    typedef typename allocator_type::size_type              size_type;
-    typedef typename allocator_type::difference_type        difference_type;
-    typedef avl_tree<key_type, mapped_type,
-		                 key_compare, allocator_type>       tree_type;
-	typedef map_iterator<value_type, key_compare>           iterator;
-	typedef const_map_iterator<value_type, key_compare>     const_iterator;
-    typedef ft::reverse_iterator<iterator>                  reverse_iterator;
-    typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
+    public:
+        typedef Key                                             key_type;
+        typedef T                                               mapped_type;
+        typedef ft::pair<const key_type, mapped_type>           value_type;
+        typedef Compare                                         key_compare;
+        typedef Allocator                                       allocator_type;
+        typedef typename allocator_type::reference              reference;
+        typedef typename allocator_type::const_reference        const_reference;
+        typedef typename allocator_type::pointer                pointer;
+        typedef typename allocator_type::const_pointer          const_pointer;
+        typedef typename allocator_type::size_type              size_type;
+        typedef typename allocator_type::difference_type        difference_type;
+        typedef avl_tree<key_type, mapped_type,
+                            key_compare, allocator_type>        tree_type;
+        typedef map_iterator<value_type, key_compare>           iterator;
+        typedef const_map_iterator<value_type, key_compare>     const_iterator;
+        typedef ft::reverse_iterator<iterator>                  reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
 
     /**
         Custom comparator class for comparing the values of key-value pairs in a map.
@@ -64,20 +68,13 @@ class map {
         protected:
             key_compare _comp;
 
-            value_compare(key_compare c);
+            value_compare(key_compare c) : _comp(c) {}
         public:
             bool operator()(const value_type& x, const value_type& y) const {
                 return _comp(x.first, y.first);
             }
     };  // value_compare class
 
-    private:
-		tree_type         _tree;
-		key_compare       _comp;
-		allocator_type    _alloc;
-		size_type         _size;
-
-    public:
         /*
         **  Constructs an empty container, with no elements.
         */
@@ -286,7 +283,12 @@ class map {
          * Delete the node containing the element from the underlying tree
          */
         void erase (iterator position)
-			{ this->erase(*position); }
+		{ if (position.base() == _tree.getEndNode()) {
+				std::cout << position.base()->right->value.first << std::endl;
+			}
+			_tree.updateRoot(_tree.deleteNode(_tree.getRoot(), ft::make_pair(position->first, position->second)));
+			_size--;
+         }
 
         /**
          * Erases all elements with the specified key from the map.
@@ -299,12 +301,12 @@ class map {
          *       to remove the element.
         */
         size_type erase(const key_type &k) {
-            if (this->find(k).base() != _tree.getEndNode()) {
-                this->erase(this->find(k));
-                return 1;
-            }
-            return 0;
-        }
+			if (this->find(k).base() != _tree.getEndNode()) {
+				this->erase(this->find(k));
+				return 1;
+			}
+			return 0;
+		}
 
         /**
          * Erases a range of elements from the map.
@@ -313,11 +315,15 @@ class map {
          * @note The range is defined as [first, last), where 'first' is included and 'last' is excluded.
          * @note After erasing the elements, the iterators in the range become invalid.
         */
-       	void erase (iterator first, iterator last)
-        {
-            while (first != last)
-                this->erase(*(first++));
-        }
+       void erase(iterator first, iterator last) {
+			ft::stack<key_type> temp;
+			for (iterator it = first; it != last; it++) {
+				temp.push(it->first);
+			}
+			for (; !temp.empty(); temp.pop()) {
+				this->erase(temp.top());
+			}
+		}
 
         /**
             Swaps the contents of this map with another map.
@@ -483,6 +489,12 @@ class map {
         allocator_type get_allocator() const{
             return _alloc;
         }
+
+    private:
+		tree_type         _tree;
+		key_compare       _comp;
+		allocator_type    _alloc;
+		size_type         _size;
 
 };  // map class
 
