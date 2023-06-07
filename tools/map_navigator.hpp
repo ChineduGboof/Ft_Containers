@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:45:55 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/04 21:24:29 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 19:08:52 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #define MAP_NAVIGATOR_HPP
 #include "iterator_traits.hpp"
 #include "avl_tree_node.hpp"
-// #include "map_iterator.hpp"
-// #include "pair.hpp"
 
 namespace ft {
 

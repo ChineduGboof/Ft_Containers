@@ -25,6 +25,5 @@ Explanation about Certain Technical Aspects of the Project:
 
 - [MLI 42](https://github.com/mli42/containers_test)
 - [Gkintana Tester](https://github.com/gkintana/42-ft_containers_tester)
-- [Terminator](https://github.com/Mikastiv/ft_containers-terminator)
 
 

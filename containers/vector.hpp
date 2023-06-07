@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 21:00:25 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 19:08:06 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <iostream>
 #include <memory>
 #include <exception>
-// #include <vector>
 #include "../tools/type_traits.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"

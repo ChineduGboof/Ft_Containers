@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/05 20:08:19 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 19:08:23 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,6 @@
 #include "../tools/equal.hpp"
 #include "../tools/avl_tree.hpp"
 #include "stack.hpp"
-// #include <map>
-// #include "../tools/map_iterator.hpp"
-// #include "../tools/map_navigator.hpp"
-// #include "../tools/avl_tree_node.hpp"
-// #include "../tools/pair.hpp"
-// #include "../tools/equal.hpp"
-
 
 namespace ft {
 
@@ -87,7 +80,7 @@ class map {
         */
         template <class InputIterator>  map (InputIterator first, InputIterator last, 
             const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-            : _comp(comp), _alloc(alloc), _size(0) {
+            : _comp(comp), _alloc(alloc), _size() {
                 this->insert(first, last);
         }
 
@@ -103,6 +96,7 @@ class map {
         **  Copies all the elements from x into the container, changing its size accordingly.
         */
         map& operator= (const map& x) {
+            this->clear();
             if (this != &x){
                 _comp = x._comp;
                 _alloc = x._alloc;
@@ -370,7 +364,7 @@ class map {
         key_compare key_comp() const{
             return _comp;
         }
-
+        
         /**
             Returns a copy of the value comparison object used by the map container.
             The value comparison object is derived from the key comparison object.

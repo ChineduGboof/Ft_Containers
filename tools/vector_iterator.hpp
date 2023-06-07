@@ -6,16 +6,13 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:57:24 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 21:04:00 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 19:09:17 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 #include "iterator_traits.hpp"
-
-// #include <vector>
-// #include <iterator>
 
 namespace ft {
 
@@ -30,7 +27,7 @@ namespace ft {
             typedef typename traits::iterator_category                          iterator_category;
 
         private:
-            pointer _currentPos;  // Pointer to the element in the vector
+            pointer _currentPos;
         
         public:
             vector_iterator(): _currentPos() {}
