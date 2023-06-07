@@ -1,7 +1,9 @@
 // map::begin/end
 #include <iostream>
 #include <map>
-
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 int main()
 {
     {

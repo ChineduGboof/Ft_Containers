@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <map>
-
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 int main() {
             
     std::pair<std::string, int>worth;

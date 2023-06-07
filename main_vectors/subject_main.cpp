@@ -2,7 +2,9 @@
 #include <string>
 #include <deque>
 #include <vector>
-// #include "containers/vector.hpp"
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 
 // #if 1 //CREATE A REAL STL EXAMPLE
 // 	#include <map>

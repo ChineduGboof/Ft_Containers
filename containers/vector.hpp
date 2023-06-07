@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/07 19:08:06 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 19:14:11 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,12 @@ public:
     */
     /************************ DEFAULT CONSTRUCTOR ************************/
 
-    explicit vector (const allocator_type& alloc = allocator_type()):   _data(0),
-                                                                        _alloc(alloc),
-                                                                        _size(0), 
-                                                                        _capacity(0) {}
+    explicit vector (const allocator_type& alloc = allocator_type()):   _data(0), _alloc(alloc), _size(0), _capacity(0) {}
 
     /************************ FILL CONSTRUCTOR  ************************/
     explicit vector (size_type n, const value_type& val = value_type(),
-                    const allocator_type& alloc = allocator_type()):    _data(0),
-                                                                        _alloc(alloc),
-                                                                        _size(n), 
-                                                                        _capacity(n) {
-            if (n > 0)
-            {
+                    const allocator_type& alloc = allocator_type()):  _data(0), _alloc(alloc), _size(n), _capacity(n) {
+            if (n > 0) {
                 _data = _alloc.allocate(_capacity);
                 for (size_type i = 0; i < _size; i++) {
                     _alloc.construct(_data + i, val);
@@ -72,10 +65,7 @@ public:
     /************************ RANGE CONSTRUCTOR ************************/
     template <class Iterator>
     vector(Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
-            typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : _data(0),
-                                                                                                _alloc(alloc),
-                                                                                                _size(0),
-                                                                                                _capacity(0) {
+            typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : _data(0), _alloc(alloc), _size(0), _capacity(0) {
         ft::check_range(first, last);
         difference_type range = 0;
         for (Iterator temp = first; temp != last; temp++) {
@@ -90,10 +80,7 @@ public:
     }
 
     /************************ COPY CONSTRUCTOR ************************/
-    vector(const vector& x) : _data(0),
-                                _alloc(x._alloc),
-                                _size(0),
-                                _capacity(0) {
+    vector(const vector& x) : _data(0), _alloc(x._alloc), _size(0), _capacity(0) {
         *this = x;
     }
 
@@ -102,7 +89,7 @@ public:
         if (!this->empty()) {
             this->~vector();
         }
-
+        
         if (this != &x) {
             _data = _alloc.allocate(x._capacity);
             _size = x._size;

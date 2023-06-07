@@ -2,7 +2,9 @@
 #include <string>
 #include <deque>
 #include <vector>
-// #include "containers/vector.hpp"
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 
 /************MAIN TO CHECK THE ITERATORS *******************/
 

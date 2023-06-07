@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 
 int main() {
     // std::vector<int> vec;

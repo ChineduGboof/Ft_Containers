@@ -1,7 +1,9 @@
 // map::equal_range
 #include <iostream>
 #include <map>
-
+#include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 /**
 
 @brief Demonstrates the usage of the equal_range function in a map.

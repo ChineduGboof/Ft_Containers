@@ -8,6 +8,8 @@
 #include <cfloat>
 #include <sys/time.h>
 #include "../containers/vector.hpp"
+#include "../containers/map.hpp"
+#include "../containers/stack.hpp"
 #include <vector>
 
 template <typename T>
