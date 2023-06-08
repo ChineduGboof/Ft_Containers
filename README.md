@@ -20,6 +20,8 @@ Explanation about Certain Technical Aspects of the Project:
 - [Build A Custom Map](https://www.geeksforgeeks.org/build-a-custom-map-using-header-file-in-c/)
 - [CPlusPlus Reference Manual](https://cplusplus.com/reference/)
 - [CPP Reference Manual](https://en.cppreference.com/w/)
+- [AVL Tree Visualizer](https://www.cs.usfca.edu/~galles/visualization/AVLtree.html)
+
 
 ## FT_Containers Testers
 

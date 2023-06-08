@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   iterator_traits.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:56:31 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/04 21:02:00 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/08 20:57:49 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ namespace ft {
 
     /*
         Iterators are classified into five categories depending on the functionality they implement:
+        It indicates the capabilities and functionality provided by the iterator.
     */
 
     // 1. Empty class to identify the category of an iterator as an input iterator:
@@ -37,7 +38,9 @@ namespace ft {
     struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 
-    // Iterator traits class template
+    /**
+     * The iterator_traits class template provides a uniform way to access the properties of iterators.
+    */
 
     // Primary template for generic iterator types
     template <class Iterator>

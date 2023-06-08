@@ -5,8 +5,7 @@
 #include "../containers/vector.hpp"
 #include "../containers/map.hpp"
 #include "../containers/stack.hpp"
-// #include "containers/vector.hpp"
-
+# define NAMESPACE std
 /************MAIN TO CHECK THE ASSIGN FUNCTION *******************/
 
 

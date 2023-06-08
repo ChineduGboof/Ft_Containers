@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/07 21:26:36 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/08 19:26:30 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -512,40 +512,30 @@ public:
         size_type n = 0;
         Iterator it = first;
 
-        while (it != last) {
-            ++n;
-            ++it;
-        }
-
+        while (it != last) { ++n; ++it; }
+        
         size_type new_size = _size + n;
-
         if (new_size > _capacity) {
             this->reserve(std::max(_capacity * 2, new_size));
         }
-
         pointer temp_data = _alloc.allocate(new_size);
-
         // Copy elements before the insert position
         for (size_type i = 0; i < static_cast<size_type>(difference); i++) {
             _alloc.construct(temp_data + i, *(_data + i));
         }
-
         // Copy inserted elements
         it = first;
         for (size_type i = static_cast<size_type>(difference); i < static_cast<size_type>(difference) + n; i++) {
             _alloc.construct(temp_data + i, *it++);
         }
-
         // Copy elements after the insert position
         for (size_type i = static_cast<size_type>(difference) + n; i < new_size; i++) {
             _alloc.construct(temp_data + i, *(_data + i - n));
         }
-
         // Destroy old elements
         for (size_type i = 0; i < _size; i++) {
             _alloc.destroy(_data + i);
         }
-
         _alloc.deallocate(_data, _capacity);
         _data = temp_data;
         _size = new_size;

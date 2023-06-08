@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:57:07 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/28 13:57:11 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:45:59 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 #define REVERSE_ITERATOR_HPP
 
 #include "iterator_traits.hpp"
-
+/**
+ * The reverse_iterator class is a wrapper around an iterator 
+ * that allows iterating in reverse order. 
+ * It provides functionality to access elements in reverse, 
+ * advance the iterator in the reverse direction, and perform arithmetic operations.
+*/
 namespace ft {
 
     template <class Iterator> 
@@ -189,12 +194,27 @@ bool operator>=(const reverse_iterator<Iterator1> &x, const reverse_iterator<Ite
 	return x.base() <= y.base();
 }
 
+/**
+ * Calculates the difference between two reverse iterators.
+ * Subtracts the base iterator of the second iterator from the base iterator of the first iterator.
+ * Returns the resulting difference.
+ * @return Difference between the iterators.
+ */
 template <class Iterator1, class Iterator2>
 typename reverse_iterator<Iterator1>::difference_type
 operator-(const reverse_iterator<Iterator1> &x, const reverse_iterator<Iterator2> &y) {
 	return y.base() - x.base();
 }
 
+/**
+ * Adds an integer value to a reverse iterator.
+ * Creates and returns a new reverse iterator pointing to the element located n positions before
+ * the element currently pointed to by the iterator.
+ *
+ * @param n Integer value representing the number of positions to move backward.
+ * @param x Reverse iterator.
+ * @return New reverse iterator.
+ */
 template <class Iterator>
 reverse_iterator<Iterator>
 operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator> &x) {
