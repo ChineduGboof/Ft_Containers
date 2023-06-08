@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/07 19:14:11 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/07 21:26:36 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,9 @@ public:
 
     /************************ ITERATORS ************************/
     
-    /*
-    ** @return The iterator to the first element.
+    /**
+    * @return The iterator to the first element.
+    * explicitly typecast the return value
     */
    	iterator begin() { 
         return iterator(_data); 
