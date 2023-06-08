@@ -6,30 +6,39 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:54:32 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/08 22:14:03 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/08 22:41:15 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.hpp"
 
-/************MAIN TO CHECK THE CONSTRUCTORS *******************/
+template <typename T>
+void printVectorComparison(const std::vector<T>& stdVec, const ft::vector<T>& ftVec) {
+    typename std::vector<T>::const_iterator stdIt = stdVec.begin();
+    typename ft::vector<T>::const_iterator ftIt = ftVec.begin();
 
-void    constructors()
-{
-	std::cout << "Checking the default constructor" << std::endl;
-	std::vector<int> myInt;
-	ft::vector<int> myFtInt;
+    std::cout << "std::vector: ";
+    for (; stdIt != stdVec.end(); ++stdIt)
+        std::cout << *stdIt << " ";
 
-	std::cout << "default size: " << GREEN << myInt.size() << YELLOW <<  myFtInt.size() << std::endl;
+    std::cout << "\nft::vector:  ";
+    for (; ftIt != ftVec.end(); ++ftIt)
+        std::cout << *ftIt << " ";
 
-	//	Checking the fill constructor
-	std::vector<int> myIntFill(5, 4);
-	ft::vector<int> myFtIntFill2(5, 4);
-	std::cout << "fill size: " << myIntFill.size() << std::endl;
+    std::cout << std::endl;
+}
 
-	// myIntFill2[1]
-	// *myIntFill2 + 1
+void constructors() {
+    std::cout << "Checking the default constructor" << std::endl;
+    std::vector<int> stdInt;
+    ft::vector<int> ftInt;
 
-	std::vector<int>::const_iterator test = myIntFill.begin() + 3;
-	std::cout << *test << std::endl;
+    std::cout << "default size: " << GREEN << stdInt.size() << YELLOW << ftInt.size() << DEFAULT << std::endl;
+
+    // Checking the fill constructor
+    std::vector<int> stdIntFill(5, 4);
+    ft::vector<int> ftIntFill(5, 4);
+
+    std::cout << "fill size: " << stdIntFill.size() << std::endl;
+    printVectorComparison(stdIntFill, ftIntFill);
 }
