@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/08 19:26:30 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:29:43 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <memory>
 #include <exception>
+#include <limits>
 #include "../tools/type_traits.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/vector_iterator.hpp"
@@ -48,10 +49,18 @@ public:
     ** Member Functions
     */
     /************************ DEFAULT CONSTRUCTOR ************************/
-
+    /**
+     *  Constructor: Constructs an empty vector.
+        Description: Initializes the vector with default values for all members.
+    */
     explicit vector (const allocator_type& alloc = allocator_type()):   _data(0), _alloc(alloc), _size(0), _capacity(0) {}
 
     /************************ FILL CONSTRUCTOR  ************************/
+    /**
+     * Fill Constructor: Constructs a vector with n copies of val.
+        Description: Allocates memory for n elements, constructs n copies of val, 
+        and initializes the vector with these values.
+    */
     explicit vector (size_type n, const value_type& val = value_type(),
                     const allocator_type& alloc = allocator_type()):  _data(0), _alloc(alloc), _size(n), _capacity(n) {
             if (n > 0) {
@@ -63,6 +72,18 @@ public:
     }
 
     /************************ RANGE CONSTRUCTOR ************************/
+    /**
+     *  Range Constructor: Constructs a vector with elements from the range [first, last).
+        Description: Determines the range size, allocates memory for the elements, 
+        and constructs the vector by copying the elements from the range.
+        Additional Note: The enable_if is used to enable/disable this constructor 
+        based on the type of the iterator. It ensures that this constructor is only 
+        available if the iterator is not of integral type (!ft::is_integral<Iterator>::value).
+        This is important to avoid ambiguity when the constructor could be mistakenly 
+        called with integral types, which might have unintended consequences.
+        The SFINAE (Substitution Failure Is Not An Error) concept is used in the range constructor 
+        to enable or disable the constructor based on the type of the iterator.
+    */
     template <class Iterator>
     vector(Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
             typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : _data(0), _alloc(alloc), _size(0), _capacity(0) {
@@ -80,11 +101,21 @@ public:
     }
 
     /************************ COPY CONSTRUCTOR ************************/
+    /**
+     *  Copy Constructor: Constructs a vector by copying another vector.
+        Description: Initializes the vector by copying the elements and allocator from vector x.
+    */
     vector(const vector& x) : _data(0), _alloc(x._alloc), _size(0), _capacity(0) {
         *this = x;
     }
 
     /************************ ASSIGNMENT OPERATOR ************************/
+    /**
+     *  @brief
+     *  Assignment Operator: Assigns the contents of one vector to another.
+        Return value: Reference to the vector after assignment.
+        Description: Deallocates the existing memory, if any, and copies the elements and allocator from vector x.
+    */
     vector &operator=(const vector &x) {
         if (!this->empty()) {
             this->~vector();
@@ -102,7 +133,13 @@ public:
     }
 
     /************************ DESTRUCTOR ************************/
-
+    /**
+     *  @brief
+        Destructor: Destroys the vector and frees allocated memory.
+        Return value: None.
+        Description: Calls the clear function to remove all elements, 
+        deallocates the memory, and sets the capacity to 0.
+    */
     ~vector() {
         this->clear();
         _alloc.deallocate(_data, _capacity);
@@ -123,7 +160,7 @@ public:
         return const_iterator(_data); 
     }
 
-    /*
+    /**
     ** @return The iterator to the past-the-end element or begin if
     ** the container is empty.
     */
@@ -135,7 +172,7 @@ public:
         return const_iterator(_data + _size); 
     }
     
-    /*
+    /**
     ** @brief Give a reverse iterator pointing to the last element
     ** in the container (this->end() - 1).
     ** @return A reverse Iterator to the reverse beginning of the.
@@ -148,7 +185,7 @@ public:
         return const_reverse_iterator(this->end());
     }
 
-    /*
+    /**
     ** @brief Give a reverse iterator point to the
     ** theorical element preceding the first element
     ** in the container.
@@ -164,7 +201,7 @@ public:
     
     /************************ CAPACITY ************************/
 
-    /*
+    /**
     ** @brief Returns the number of elements stored in the container.
     ** It's not necessarily equal to the storage capacity
     */
@@ -172,7 +209,7 @@ public:
         return _size;
     }
 
-    /*
+    /**
     ** @brief Returns the maximum potential number of elements the the
     ** vector can hold.
     ** will fail on char
@@ -181,7 +218,7 @@ public:
         return _alloc.max_size();
     }
 
-    /*
+    /**
     ** @brief Return size of allocated storage capacity.
     ** The number elements it can hold.
     */
@@ -189,7 +226,7 @@ public:
         return _capacity;
     }
 
-    /*
+    /**
     ** @brief Returns whether the container is empty.
     ** @return true if the container size is 0, false otherwise.
     */
@@ -197,7 +234,7 @@ public:
         return _size == 0;
     }
 
-    /*
+    /**
     ** @brief Request that the vector capacity be at least
     ** enougth to contain "n" element.
     ** If n is greater that the actual capacity a reallocation
@@ -225,7 +262,7 @@ public:
         }
     }
 
-    /*
+    /**
     ** @brief Resizes the container so that it contain "n"
     ** element. If "n" is smaller than the actual size
     ** the container is reduced to "n" elements 
@@ -266,7 +303,7 @@ public:
 
     /************************ ELEMENT ACCESS ************************/
     
-    /*
+    /**
     ** @brief Returns a reference to the element at
     ** position n in the vector container.
     ** If "n" is out of range that's causes undefined behavior.
@@ -279,7 +316,7 @@ public:
         return *(_data + n);
     }
 
-    /*
+    /**
     ** @brief Returns a reference to the element at
     ** position n in the vector container.
     ** The main difference between this function and the
@@ -301,7 +338,7 @@ public:
         return *(_data + n);
     }
     
-    /*
+    /**
     ** @brief Return a reference to the first element
     ** of the container. Call this on an empty container
     ** cause undefined behavior.
@@ -326,7 +363,7 @@ public:
         return *(this->end() - 1);
     }
 
-    /*
+    /**
     ** @return A pointer to the first element in the array used internally by the vector.
     ** Member type value_type is the type of the elements in the container, 
     ** defined in vector as an alias of the first class template parameter (T)
@@ -341,7 +378,7 @@ public:
 
     /************************ MODIFIERS ************************/
 
-    /*
+    /**
     ** Range (1)
     ** The new contents are elements constructed from each of the elements 
     ** in the range between first and last, in the same order.
@@ -370,7 +407,7 @@ public:
         }
     }
 
-    /*
+    /**
     ** In the fill version (2), the new contents are n elements, 
     ** each initialized to a copy of val.
     ** @brief Fill assign.
@@ -409,7 +446,7 @@ public:
         _size++;
     }
 
-    /*
+    /**
     ** @brief Delete the last element of the container.
     ** Reduce the size of the vector of one.
     ** If the container is empty, cause undefined behavior.
@@ -419,7 +456,7 @@ public:
         _size--;
     }
 
-    /*
+    /**
     ** Single Element
     ** @brief Insert an element at the position. Can increase the size
     ** of the container. This action forces the container to
@@ -449,7 +486,7 @@ public:
         return position;
     }
 
-    /*
+    /**
     ** Fill Insert
     ** @brief Insert an element a "n" amount of times
     ** starting from the specified position. Can increase the capacity
@@ -490,7 +527,7 @@ public:
     }
 }
 
-    /*
+    /**
     ** @brief Insert element in range from ["first" to
     ** "last") at "position". Can increase the capacity of
     ** the container. Throw if the iterator given is not valid.
@@ -541,7 +578,7 @@ public:
         _size = new_size;
     }
 
-    /*
+    /**
     ** @brief Remove element from the vector at "position".
     ** Reduce the size of 1;
     ** @param position the iterator pointing to the
@@ -562,7 +599,7 @@ public:
         return position;
     }
 
-    /*
+    /**
     ** @brief Remove element from the vector a range of element.
     ** Reduce the size by the number of element removed.
     ** @param first the first element in the range.
@@ -587,7 +624,7 @@ public:
         return result;
     }
 
-    /*
+    /**
     ** @brief Exchanges the content of the container 
     ** by the content of x, which is another vector object 
     ** of the same type. Sizes may differ.
@@ -613,7 +650,7 @@ public:
         x._capacity = temp_capacity;
     }
 
-    /*
+    /**
     ** @brief Removes (destroy) all elements from the
     ** container. Final size is 0.
     */
@@ -625,7 +662,7 @@ public:
     }
 
     /************************ ALLOCATOR ************************/
-    /*
+    /**
     ** @brief Returns a copy of the allocator object
     ** associated with the vector.
     */
@@ -669,7 +706,7 @@ bool operator!=(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocat
 	return !(lhs == rhs);
 }
 
-/*
+/**
 ** @brief Compare vector container to know
 ** if "lhs" elements are lexicographicalement less than "rhs".
 **
@@ -699,7 +736,7 @@ bool operator>=(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocat
 	return !(lhs < rhs);
 }
 
-/*
+/**
 ** @brief Overload of swap (vector).
 ** The contents of container are swaped.
 ** @param x, y the containers to swap.

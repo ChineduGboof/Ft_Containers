@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gboof <gboof@student.42.fr>                +#+  +:+       +#+         #
+#    By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/18 16:43:12 by cegbulef          #+#    #+#              #
-#    Updated: 2023/06/07 19:52:46 by gboof            ###   ########.fr        #
+#    Updated: 2023/06/09 16:45:02 by cegbulef         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	ft_containers
 
-SRCS		=	main.cpp
+SRCS		=	main.cpp Tests/vector_test.cpp
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 

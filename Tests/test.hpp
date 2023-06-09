@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:05:54 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/08 22:01:03 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/09 15:31:46 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #include "../containers/map.hpp"
 #include "../containers/stack.hpp"
 
-
+void vector_tests();
+void vector_allocation();
+void nested_vectors();
 
 #endif

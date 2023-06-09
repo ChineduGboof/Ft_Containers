@@ -6,13 +6,15 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:04:47 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/08 22:41:34 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:44:47 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main_vectors/test.hpp"
+#include "Tests/test.hpp"
 
 int main() {
-    constructors();
+    vector_tests();
+    vector_allocation();
+    nested_vectors();
     return 0;
 }
