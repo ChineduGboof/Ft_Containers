@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_test.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:54:32 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/09 17:34:43 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/11 01:54:52 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,13 @@ void vector_tests() {
         std::vector<int> stdIntResize;
         ft::vector<int> ftIntResize;
 
-        stdIntResize.resize(10);  // Resize to a larger size
-        ftIntResize.resize(10);
+        stdIntResize.resize(100000);  // Resize to a larger size
+        ftIntResize.resize(100000);
+        printVectorComparison(stdIntResize.size(), ftIntResize.size());
 
         stdIntResize.resize(3);  // Resize to a smaller size
         ftIntResize.resize(3);
+        printVectorComparison(stdIntResize.size(), ftIntResize.size());
 
         stdIntResize.resize(5, 42);  // Resize and initialize new elements
         ftIntResize.resize(5, 42);
@@ -180,25 +182,13 @@ void vector_tests() {
 
         printVectorComparison(stdIntIterator, ftIntIterator);
     }
-
     {
-        std::cout << "TESTING EXCEPTION SAFETY" << std::endl;
-        std::vector<int> stdIntException;
-        ft::vector<int> ftIntException;
-
-        try {
-            stdIntException.resize(100000);
-        } catch (const std::bad_alloc& e) {
-            std::cout << "std::vector exception: " << e.what() << std::endl;
-        }
-
-
-        try {
-            ftIntException.resize(100000);
-        } catch (const std::bad_alloc& e) {
-            std::cout << "ft::vector exception: " << e.what() << std::endl;
-        }
-
+        std::cout << "TESTING THE ASSIGN FUNCTION" << std::endl;
+        std::vector<int> stdInt;
+        ft::vector<int> ftInt;
+        stdInt.assign(6, 5);
+        ftInt.assign(6, 5);
+        printVectorComparison(stdInt, ftInt);
     }
 
     {
@@ -247,14 +237,14 @@ void vector_tests() {
         ftInt.push_back(5);
 
         // Compare const iterators with iterators
-        typename std::vector<int>::const_iterator stdConstIt = stdInt.begin();
-        typename std::vector<int>::iterator stdIt = stdInt.begin();
-        typename ft::vector<int>::const_iterator ftConstIt = ftInt.begin();
-        typename ft::vector<int>::iterator ftIt = ftInt.begin();
+        std::vector<int>::const_iterator stdConstIt = stdInt.begin();
+        std::vector<int>::iterator stdIt = stdInt.begin();
+        ft::vector<int>::const_iterator ftConstIt = ftInt.begin();
+        ft::vector<int>::iterator ftIt = ftInt.begin();
 
         std::cout << "Comparing const iterator with iterator:\n";
-        std::cout << "std::vector: " << (*stdConstIt == *stdIt) << std::endl;
-        std::cout << "ft::vector: " << (*ftConstIt == *ftIt) << std::endl;
+        std::cout << GREEN << "std::vector: " << (*stdConstIt == *stdIt) << DEFAULT << std::endl;
+        std::cout << YELLOW << "ft::vector: " << (*ftConstIt == *ftIt) << DEFAULT << std::endl;
     }
 
 }
@@ -298,17 +288,19 @@ void vector_allocation()
 class MyVector {
 public:
     MyVector() {
-        std::cout << "Constructing MyVector..." << std::endl;
+        // std::cout << "Constructing MyVector..." << std::endl;
     }
 
     ~MyVector() {
-        std::cout << "Destroying MyVector..." << std::endl;
+        // std::cout << "Destroying MyVector..." << std::endl;
     }
 };
 
 void nested_vectors() {
     ft::vector<ft::vector<ft::vector<MyVector> > > nestedVectors;
 
+    std::cout << std::endl;
+    std::cout << "Test For Memory Allocation, Object Construction, Resizing, and Nested Vector Behavior." << std::endl;
     std::cout << "Creating nested vectors..." << std::endl;
     nestedVectors.resize(3);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:59:29 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/09 16:29:43 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/11 01:17:16 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 #include "../tools/reverse_iterator.hpp"
 #include "../tools/lexicographical_compare.hpp"
 
+/**
+ * A vector is a dynamic container for storing a sequence of elements in a linear arrangement. 
+ * It offers efficient resizing, element access by position, 
+ * and supports various operations like insertion, deletion, and traversal.
+*/
 namespace ft {
 
 template < class T, class Allocator = std::allocator<T> >
@@ -379,28 +384,36 @@ public:
     /************************ MODIFIERS ************************/
 
     /**
-    ** Range (1)
-    ** The new contents are elements constructed from each of the elements 
-    ** in the range between first and last, in the same order.
-    ** @param first the first element in the range.
-    ** @param last the last element in the range.
-    ** enable this function if it is not integral else use the next assign function
-    ** type* = 0 construct is used to conditionally enable or disable the function based on the type trait check
-    ** reserve more space if the range is larger than current capacity, then update the values
-    */
-    template <class InputIt>
-    void assign(InputIt first, InputIt last,
-                typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0) {
+     * Range (1)
+     * The new contents are elements constructed from each of the elements 
+     * in the range between first and last, in the same order.
+     * @param first The iterator to the first element in the range.
+     * @param last The iterator to the last element in the range.
+     * @param type* = 0 This construct is used to conditionally enable or disable the function based on the type trait check.
+     *
+     * The function is enabled if the iterator type is not integral, 
+     * otherwise, the next assign function is used.
+     * The function first checks the range by iterating from first to last 
+     * to determine the number of elements in the range.
+     * If the range is larger than the current capacity, 
+     * it reserves more space by calling the reserve function.
+     * It then updates the size to match the range.
+     * Finally, it iterates over the range, using the iterator iter, 
+     * and constructs each element at the corresponding position in the vector.
+     */
+    template <class Iterator>
+    void assign(Iterator first, Iterator last,
+                typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) {
         ft::check_range(first, last);
         difference_type range = 0;
-        for (InputIt temp = first; temp != last; temp++) {
+        for (Iterator temp = first; temp != last; temp++) {
             range++;
         }
 
         if (static_cast<size_type>(range) > _capacity) {
             this->reserve(range);
         }
-        InputIt iter = first;
+        Iterator iter = first;
         _size = static_cast<size_type>(range);
         for (size_type i = 0; i < _size; i++) {
             _alloc.construct(_data + i, *iter++);
@@ -408,14 +421,14 @@ public:
     }
 
     /**
-    ** In the fill version (2), the new contents are n elements, 
-    ** each initialized to a copy of val.
-    ** @brief Fill assign.
-    ** Clear the container, fill it with val "n" times.
-    ** According size to "n".
-    ** @param "n" the number of element.
-    ** @param "val" the value of element.
-    */
+     * In the fill version (2), the new contents are n elements,
+     * each initialized to a copy of val.
+     * @brief Fill assign.
+     * Clear the container and fill it with n elements, each initialized to the value val.
+     * The size of the vector is updated to n.
+     * @param n The number of elements to assign.
+     * @param val The value to initialize each element with.
+     */
     void assign(size_type n, const value_type& value) {
         this->clear();
         if (n > 0) {
@@ -466,6 +479,15 @@ public:
     ** @param position The position where insert.
     ** @param val The element to insert.
     ** @return An iterator that points to the first of the newly inserted elements.
+    ** @details 
+    ** Check if the position is valid (greater than or equal to 0)
+    ** Check if the capacity is 0, and reserve space for at least 1 element
+    ** Check if the size has reached the capacity, and double the capacity if necessary
+    ** Shift elements to make space for the new element
+    ** Construct a new element by copying the previous element
+    ** Destroy the previous element
+    ** Construct the new element at the specified position and increase the container size
+    ** Return an iterator pointing to the first of the newly inserted elements
     */
     iterator insert (iterator position, const value_type& val){
         difference_type difference = position - this->begin();
@@ -497,7 +519,17 @@ public:
     ** @param position The position where insert.
     ** @param n Amout of element to insert.
     ** @param val The element to insert.
-    ** 
+    ** @details 
+    ** Check if the new size exceeds the current capacity, and reserve more space if necessary
+    ** Shift existing elements to make space for the new elements
+    ** Move elements from the insert position onwards
+    ** Construct new elements at the insert position
+    ** Inserting elements into the vector at a specified position.
+    ** Example: 1, 2, 3, 4 -> 1, 2, 3, 6, 7, 4
+    ** diff(3) | n(2) | new_size = (6)
+    ** i = 0; i < 3; i++; {1, 2, 3, ?, ?, ?} -> copy old values to temp_data
+    ** i = 3; i < 6; i++; {1, 2, 3, 6, 7, ?} -> copy new values to temp
+    ** i = 5, i < 6; i++; {1, 2, 3, 6, 7, 4} -> copy the last old value to temp
     */
 
     void insert(iterator position, size_type n, const value_type& val) {
@@ -510,15 +542,12 @@ public:
     if (n > 0){
         pointer insert_pos = _data + difference;
 
-        // Shift existing elements to make space for the new elements
         if (difference < static_cast<difference_type>(_size)) {
-            // Move elements from the insert position onwards
             for (pointer it = _data + _size - 1; it >= insert_pos; --it) {
                 _alloc.construct(it + n, *it);
                 _alloc.destroy(it);
             }
         }
-        // Construct new elements at the insert position
         for (size_type i = 0; i < n; ++i) {
             _alloc.construct(insert_pos + i, val);
         }
@@ -536,7 +565,10 @@ public:
     ** @param position the position where insert.
     ** @param first the first element in the range.
     ** @param last the last element in the range.
-    ** 1, 2, 3, 4 -> 1, 2, 3, 6, 7, 5
+    ** @details The elements before the insert position are copied to temporary storage.
+    *  The inserted elements are then copied to the container.
+    *  Finally, the elements after the insert position are copied from the previous container state.
+    ** 1, 2, 3, 4 -> 1, 2, 3, 6, 7, 4
     ** diff(3) | n (2) | new_size = (6)
     ** i = 0; i < 3; i++; {1, 2, 3, ?, ?, ?} -> copy old values to temp_data
     ** i = 3; i < 6; i++; {1, 2, 3, 6, 7, ?} -> copy new values to temp
@@ -556,20 +588,16 @@ public:
             this->reserve(std::max(_capacity * 2, new_size));
         }
         pointer temp_data = _alloc.allocate(new_size);
-        // Copy elements before the insert position
         for (size_type i = 0; i < static_cast<size_type>(difference); i++) {
             _alloc.construct(temp_data + i, *(_data + i));
         }
-        // Copy inserted elements
         it = first;
         for (size_type i = static_cast<size_type>(difference); i < static_cast<size_type>(difference) + n; i++) {
             _alloc.construct(temp_data + i, *it++);
         }
-        // Copy elements after the insert position
         for (size_type i = static_cast<size_type>(difference) + n; i < new_size; i++) {
             _alloc.construct(temp_data + i, *(_data + i - n));
         }
-        // Destroy old elements
         for (size_type i = 0; i < _size; i++) {
             _alloc.destroy(_data + i);
         }
@@ -578,18 +606,17 @@ public:
         _size = new_size;
     }
 
-    /**
-    ** @brief Remove element from the vector at "position".
-    ** Reduce the size of 1;
-    ** @param position the iterator pointing to the
-    ** element to remove.
-    ** @return a pointer to the element a "&(*position) + 1"; 
-    ** An iterator pointing to the new location of the element 
-    ** that followed the last element erased by the function call. 
-    ** This is the container end if the operation erased the last element in the sequence.
-    ** {1, 2, 3, 4} -> {1, 2, 4}
-    */
-
+   /**
+     * @brief Erase element from the vector at the specified position.
+     *        Reduces the size of the container by 1.
+     * @param position An iterator pointing to the element to remove.
+     * @return An iterator pointing to the new location of the element that followed the last element erased by the function call.
+     *         If the operation erased the last element in the sequence, it returns the container end iterator.
+     * @details The elements after the erased element are shifted to fill the gap.
+     *          The last element is destroyed, reducing the size of the container.
+     *          The function returns an iterator pointing to the new location of the element that followed the erased element.
+     *          If the erased element was the last element, the function returns the container end iterator.
+     */
     iterator erase(iterator position) {
         for (iterator it = position; it != this->end() - 1; it++) {
             *it = *(it + 1);
@@ -600,15 +627,16 @@ public:
     }
 
     /**
-    ** @brief Remove element from the vector a range of element.
-    ** Reduce the size by the number of element removed.
-    ** @param first the first element in the range.
-    ** @param last the last element in the range.
-    ** @return An iterator that point to the first element
-    ** after "last".
-    ** {1, 2, 3, 4, 5, 6} -> {1, 2, 6}
-    ** first = 3 last = 6 begin = 1, end = null
-    */
+     * @brief Erase a range of elements from the vector.
+     *        Reduces the size of the container by the number of elements removed.
+     * @param first An iterator pointing to the first element in the range to be erased.
+     * @param last An iterator pointing to the last element in the range to be erased.
+     * @return An iterator pointing to the first element after the range that was erased.
+     * @details The elements in the range [first, last) are removed from the container.
+     *          The elements after the erased range are shifted to fill the gap.
+     *          The elements at the end of the container are destroyed, reducing the size of the container.
+     *          The function returns an iterator pointing to the first element after the erased range.
+     */
 
     iterator erase(iterator first, iterator last) {
         iterator result = first;
@@ -679,11 +707,18 @@ private:
 };
 
 /************************ NON-MEMBER FUNCTIONS ************************/
-/*
-** the operator== implementation you provided checks both the sizes 
-** and the values of the elements in the vectors for equality.
-*/
-
+/**
+ * @brief Equality comparison operator for ft::vector.
+ * @param lhs The left-hand side vector.
+ * @param rhs The right-hand side vector.
+ * @return True if the vectors are equal in size and have equal elements, false otherwise.
+ * @details The function compares the size of the vectors first.
+ *          If the sizes are different, it returns false.
+ *          Otherwise, it iterates over the elements of the vectors and checks if each pair of corresponding elements is equal.
+ *          If any pair of corresponding elements is not equal, it returns false.
+ *          If all the elements are equal, it returns true.
+ *          The comparison is done using the `!=` operator on the elements.
+ */
 template <class T, class Allocator>
 bool operator==(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs) {
 	if (lhs.size() != rhs.size()) {

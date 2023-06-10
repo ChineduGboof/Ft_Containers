@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/07 19:08:23 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/10 19:36:37 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 #include "../tools/avl_tree.hpp"
 #include "stack.hpp"
 
+/**
+ * The map class is a container that stores elements as key-value pairs. 
+ * It provides fast lookup and retrieval of values based on their associated keys.
+*/
 namespace ft {
 
 template < class Key, class T, class Compare = std::less<Key>,  

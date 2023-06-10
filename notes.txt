@@ -1,64 +1,24 @@
-Tests:
+Issues:
+
+Check the assign function
+why is this line there? ft::check_range(first, last); if the range is already being checked in the second while loop
+template <class Iter>
+void check_range(Iter first, Iter last) {
+	iterator_validity(first, last, typename ft::iterator_traits<Iter>::iterator_category());
+}
+
+template <class Iter>
+void iterator_validity(Iter first, Iter last, typename std::bidirectional_iterator_tag) {
+	(void)first;
+	(void)last;
+}
+
+also explain
 
 
-Check the following Functions
-
-end()
-rbegin()
-rend()
-reserve()
-resize()
-
-test the  vec.insert(vec.end(), 6);
-does it insert this 6 to the end of the vector or does it insert the previous value in the vector
-
-
-test the fill insert function cos i changed its implementation
-
-
-check max_size (will fail on char)
-
-test the operator-- for reverse-iterator
-testers:
-terminator
-
-
-changes:
-reverse_iterator operator--(int)
-
-
-AVL Tree
-
--1 => greater on the right side
-1 => greater on the left side
-0 => equal on both sides
-
-left side - right side
-
-Construct AVL tree by inserting the following data:
-
-14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20
-
-Solution: Arrange them starting from top to bottom, taking note of their height
--> Height of a node with no connecting nodes(branch) under it is 0
--> Add the heights of the sub branches and add 1 to get the height of the main branch
--> subtract the heights to get the balance factor (subtract from left to right)
--> Balance factor cannot be greater than 1 or less than -1
--> When you the do a rotation, the median element will be the root
-
-                less then <---- ----> Greater than
-                             [14]
-
-                    [11]              [17]
-
-            [7]                                 [53]
-
-
-
-Sort out in Maps:
-
-map navigator
-
-map destructor
-
-https://www.youtube.com/watch?v=_8qqlVH5NC0
+template <class Iter>
+void iterator_validity(Iter first, Iter last, typename std::random_access_iterator_tag) {
+	if (first > last) {
+		throw std::length_error("cannot create std::vector larger than max_size()");
+	}
+}

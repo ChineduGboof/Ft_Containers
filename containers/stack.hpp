@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 20:13:55 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/04 21:49:36 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/10 19:43:04 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 #include "vector.hpp"
 
+/**
+ * A stack is a collection of elements where the last element 
+ * added is the first one to be removed, following a Last-In-First-Out (LIFO) principle. 
+ * It supports adding elements (push) and removing elements (pop) from the top.
+*/
 namespace ft {
 
     template <class T, class Container = ft::vector<T> > class stack {
