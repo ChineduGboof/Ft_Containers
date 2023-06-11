@@ -77,6 +77,7 @@
         "queue": "cpp",
         "set": "cpp",
         "__availability": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "filesystem": "cpp"
     }
 }

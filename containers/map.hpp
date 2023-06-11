@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:34:03 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/10 19:36:37 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/11 04:16:51 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ class map {
         **  Assigns new contents to the container, replacing its current content.
         **  Copies all the elements from x into the container, changing its size accordingly.
         */
-        map& operator= (const map& x) {
+        map &operator=(const map& x) {
             this->clear();
             if (this != &x){
                 _comp = x._comp;
