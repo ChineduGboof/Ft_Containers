@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_test.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 02:00:36 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/11 05:31:43 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/11 21:06:30 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.hpp"
-
-// template <typename Key, typename T>
-// void printMapComparison(const std::map<Key, T>& stdMap, const ft::map<Key, T>& ftMap) {
-//     typename std::map<Key, T>::const_iterator stdIt = stdMap.begin();
-//     typename ft::map<Key, T>::const_iterator ftIt = ftMap.begin();
-
-//     std::cout << GREEN << "std::map: ";
-//     for (; stdIt != stdMap.end(); ++stdIt)
-//         std::cout << "(" << stdIt->first << "," << stdIt->second << ") " << DEFAULT;
-
-//     std::cout << YELLOW << "\nft::map:  ";
-//     for (; ftIt != ftMap.end(); ++ftIt)
-//         std::cout << "(" << ftIt->first << "," << ftIt->second << ") " << DEFAULT;
-
-//     std::cout << std::endl << std::endl;
-// }
 
 void mapTests(){
      {
@@ -366,4 +350,35 @@ void mapTests(){
         }
         std::cout << std::endl;
     }
+
+    {
+        {
+            std::cout << "TEST THE ORDERED FUNCTION" << std::endl;
+
+            ft::map<char, int> ftMap;
+            ftMap['c'] = 3;
+            ftMap['d'] = 5;
+            ftMap['e'] = 6;
+
+            bool isftMapOrdered = isMapOrdered(ftMap);
+            std::cout << GREEN << "ftMap is ordered: " << (isftMapOrdered ? "true" : "false") << DEFAULT << std::endl;
+            std::cout << std::endl;
+        }
+
+    }
+
+    {
+          // Create an instance of the map and populate it
+        ft::map<char, int> ftMap;
+        ftMap['c'] = 3;
+        ftMap['d'] = 5;
+        ftMap['e'] = 6;
+        ftMap['f'] = 10;
+        ftMap['b'] = 7;
+        ftMap['a'] = 11;
+
+        // Call the printPreOrder function passing the map
+        printPreOrder(ftMap);
+    }
+
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:05:54 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/11 02:24:43 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/11 21:20:53 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,36 @@
 #include "../containers/vector.hpp"
 #include "../containers/map.hpp"
 #include "../containers/stack.hpp"
+#include "../tools/avl_tree.hpp"
+
+template <typename Key, typename T>
+bool isMapOrdered(const ft::map<Key, T>& map) {
+    typename ft::map<Key, T>::const_iterator it = map.begin();
+    typename ft::map<Key, T>::const_iterator next = it;
+    ++next;
+    while (next != map.end()) {
+        if (map.key_comp()((*next).first, (*it).first))
+            return false;
+        ++it;
+        ++next;
+    }
+    return true;
+}
+
+// Function to print the elements of the map in pre-order traversal
+template<typename Key, typename T, typename Compare, typename Alloc>
+void printPreOrder(const ft::map<Key, T, Compare, Alloc>& map) {
+    typename ft::map<Key, T, Compare, Alloc>::const_iterator it;
+    for (it = map.begin(); it != map.end(); ++it) {
+        std::cout << "Key = " << it->first
+                  << "\t\tValue = " << it->second << std::endl;
+    }
+}
 
 void vector_tests();
 void vector_allocation();
 void nested_vectors();
 void mapTests();
+void stackTests();
 
 #endif
