@@ -6,7 +6,7 @@
 /*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 02:00:36 by gboof             #+#    #+#             */
-/*   Updated: 2023/06/11 04:59:10 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/11 05:31:43 by gboof            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void mapTests(){
         std::cout << "ftMap contains:\n";
         for (std::map<char,int>::iterator it=ftMap.begin(); it!=ftMap.end(); ++it)
             std::cout << GREEN << it->first << " => " << it->second << DEFAULT << '\n';
+        std::cout << std::endl;
     }
     {
         std::cout << "TEST THE BOUNDS FUNCTION" <<std::endl;
@@ -125,7 +126,7 @@ void mapTests(){
             std::cout << "upper bound points to: " << std::endl;
             std::cout << YELLOW << "std: "<< stdRet.second->first << " => " << stdRet.second->second << DEFAULT << '\n';
             std::cout << GREEN << "ft: "<< ftRet.second->first << " => " << ftRet.second->second << DEFAULT <<'\n';
-
+            std::cout << std::endl;
         }
 
         {
@@ -139,7 +140,7 @@ void mapTests(){
             std::cout << "upper bound points to: " << std::endl;
             std::cout << YELLOW << "std: "<< stdRet.second->first << " => " << stdRet.second->second << DEFAULT << '\n';
             std::cout << GREEN << "ft: "<< ftRet.second->first << " => " << ftRet.second->second << DEFAULT <<'\n';
-
+            std::cout << std::endl;
         }
 
         {
@@ -161,7 +162,7 @@ void mapTests(){
             std::cout << "ft: " << std::endl;
             for (stdIt=stdMap.begin(); stdIt!=stdMap.end(); ++stdIt)
                 std::cout << GREEN << stdIt->first << " => " << stdIt->second << DEFAULT <<'\n';
-
+            std::cout << std::endl;
         }
     }
     {
@@ -187,6 +188,7 @@ void mapTests(){
         std::cout << "elements in ftMap:" << '\n';
         std::cout << YELLOW << "a => " << ftMap.find('a')->second << DEFAULT << '\n';
         std::cout << YELLOW << "d => " << ftMap.find('d')->second << DEFAULT << '\n';
+        std::cout << std::endl;
     }
     {
         std::cout << "TEST THE INSERT FUNCTION" <<std::endl;
@@ -210,7 +212,7 @@ void mapTests(){
                 std::cout << GREEN << ftIt->second << " " << DEFAULT;
             }
             std::cout << std::endl;
-
+            std::cout << "Insertion with already used key: " << std::endl;
             std::pair<std::map<char, int>::iterator, bool> stdRes;
             stdRes = stdMap.insert(std::pair<char, int>('a', 70));
             if (stdRes.second == false){
@@ -221,26 +223,147 @@ void mapTests(){
             if (ftRes.second == false){
                 std::cout << GREEN << "Element '" << ftRes.first->first << "' already exists with value " << ftRes.first->second << std::endl;
             }
+            std::cout << std::endl;
         }
             std::cout << "Insertion with Hint: " << std::endl;
-            // second insert function version (with hint position):
             std::map<char,int>::iterator stdIt = stdMap.begin();
             ft::map<char,int>::iterator ftIt = ftMap.begin();
         {
-            stdMap.insert (stdIt, std::pair<char,int>('b',300));  // max efficiency inserting
-            stdMap.insert (stdIt, std::pair<char,int>('c',400));  // no max efficiency inserting
+            stdMap.insert (stdIt, std::pair<char,int>('b',300));
+            stdMap.insert (stdIt, std::pair<char,int>('c',400));
             for (stdIt = stdMap.begin(); stdIt != stdMap.end(); ++stdIt){
                 std::cout << YELLOW << stdIt->second << " " << DEFAULT;
             }
             std::cout << std::endl;
 
-            ftMap.insert (ftIt, ft::pair<char,int>('b',300));  // max efficiency inserting
-            ftMap.insert (ftIt, ft::pair<char,int>('c',400));  // no max efficiency inserting
+            ftMap.insert (ftIt, ft::pair<char,int>('b',300));
+            ftMap.insert (ftIt, ft::pair<char,int>('c',400)); 
             for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ++ftIt){
                 std::cout << GREEN << ftIt->second  << " " << DEFAULT;
             }
             std::cout << std::endl;
-
+            std::cout << std::endl;
         }
+
+        {
+            std::map<char, int> stdMap;
+            ft::map<char, int> ftMap;
+
+            stdMap['x'] = 1001;
+            stdMap['y'] = 2002;
+            stdMap['z'] = 3003;
+            ftMap['x'] = 1001;
+            ftMap['y'] = 2002;
+            ftMap['z'] = 3003;
+
+            std::map<char, int>::iterator stdIt1 = stdMap.begin();        // Iterator to the first element
+            std::map<char, int>::reverse_iterator stdIt2 = stdMap.rbegin(); // Reverse iterator to the last element
+            ft::map<char, int>::iterator ftIt1 = ftMap.begin(); 
+            ft::map<char, int>::reverse_iterator ftIt2 = ftMap.rbegin(); 
+            bool isStdFirstKeyLess = stdMap.key_comp()(stdIt1->first, stdIt2->first);
+            bool isFtFirstKeyLess = stdMap.key_comp()(ftIt1->first, ftIt2->first);
+
+            std::cout << "The key of the STD first element ('" << stdIt1->first << "') is ";
+
+            if (isStdFirstKeyLess) {
+                std::cout << YELLOW << "less than the key of the last element ('" << stdIt2->first << "')." << DEFAULT << std::endl;
+            } else {
+                std::cout << YELLOW << "not less than the key of the last element ('" << stdIt2->first << "')." << DEFAULT <<std::endl;
+            }
+            std::cout << "The key of the FT first element ('" << ftIt1->first << "') is ";
+
+            if (isFtFirstKeyLess) {
+                std::cout << GREEN << "less than the key of the last element ('" << ftIt2->first << "')." << DEFAULT <<std::endl;
+            } else {
+                std::cout << GREEN << "not less than the key of the last element ('" << ftIt2->first << "')." << DEFAULT << std::endl;
+            }
+            std::cout << std::endl;
+        }
+        {
+            std::cout << "TEST THE MAKE_PAIR FUNCTION" <<std::endl;
+
+            std::pair<std::string, int>stdMap;
+            ft::pair<std::string, int>ftMap;
+            stdMap = std::make_pair("Bugsy", 400);
+            ftMap = ft::make_pair("Bugsy", 400);
+            std::cout << YELLOW << "stdMap of " << stdMap.first << " " << stdMap.second << DEFAULT << std::endl;
+            std::cout << GREEN << "ftMap of " << ftMap.first << " " << ftMap.second << DEFAULT << std::endl;
+            std::cout << std::endl;
+        }
+        {
+            std::cout << "TEST THE SWAP FUNCTION" <<std::endl;
+            std::map<char,int> foo,bar;
+            ft::map<char,int> hoo, ber;
+
+            foo['x']=100;
+            foo['y']=200;
+
+            bar['a']=11;
+            bar['b']=22;
+            bar['c']=33;
+
+            hoo['x']=100;
+            hoo['y']=200;
+
+            ber['a']=11;
+            ber['b']=22;
+            ber['c']=33;
+
+            foo.swap(bar);
+            hoo.swap(ber);
+
+            std::cout << "std foo contains:\n";
+            for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+                std::cout << YELLOW << it->first << " => " << it->second << DEFAULT << '\n';
+
+            std::cout << "std bar contains:\n";
+            for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+                std::cout << YELLOW << it->first << " => " << it->second << DEFAULT << '\n';
+            
+            std::cout << "ft hoo contains:\n";
+            for (ft::map<char,int>::iterator it=hoo.begin(); it!=hoo.end(); ++it)
+                std::cout << GREEN << it->first << " => " << it->second << DEFAULT << '\n';
+
+            std::cout << "ft ber contains:\n";
+            for (ft::map<char,int>::iterator it=ber.begin(); it!=ber.end(); ++it)
+                std::cout << GREEN << it->first << " => " << it->second << DEFAULT << '\n';
+            std::cout << std::endl;
+        }
+    }
+    {
+        std::cout << "TEST THE VALUE_COMPARE FUNCTION" <<std::endl;
+        std::map<char, int> stdMap;
+        ft::map<char, int> ftMap;
+
+        stdMap['x'] = 1001;
+        stdMap['y'] = 2002;
+        stdMap['z'] = 3003;
+        ftMap['x'] = 1001;
+        ftMap['y'] = 2002;
+        ftMap['z'] = 3003;
+        
+        std::pair<char, int> stdIt1 = *stdMap.begin();           // First element
+        std::pair<char, int> stdIt2 = *stdMap.rbegin();           // Last element
+        ft::pair<char, int> ftIt1 = *ftMap.begin();           // First element
+        ft::pair<char, int> ftIt2 = *ftMap.rbegin();           // Last element
+
+        bool isStdFirstElementLess = stdMap.value_comp()(stdIt1, stdIt2);
+        bool isFtFirstElementLess = ftMap.value_comp()(ftIt1, ftIt2);
+
+        std::cout << YELLOW << "The value of the first element (" << stdIt1.second << ") is ";
+
+        if (isStdFirstElementLess) {
+            std::cout << "less than the value of the last element (" << stdIt2.second << ")." << DEFAULT << std::endl;
+        } else {
+            std::cout << "not less than the value of the last element (" << stdIt2.second << ")." << DEFAULT << std::endl;
+        }
+        
+        std::cout << GREEN << "The value of the first element (" << ftIt1.second << ") is ";
+        if (isFtFirstElementLess) {
+            std::cout << "less than the value of the last element (" << ftIt2.second << ")." << DEFAULT << std::endl;
+        } else {
+            std::cout << "not less than the value of the last element (" << ftIt2.second << ")." << DEFAULT << std::endl;
+        }
+        std::cout << std::endl;
     }
 }
