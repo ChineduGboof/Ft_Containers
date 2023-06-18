@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:57:07 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/08 21:45:59 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:13:47 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,26 @@ namespace ft {
                 return *this;
             }
 
-            /*
+            /**
             ** @brief: Advances the reverse_iterator by one position.
+            **
+            ** This member function is used to advance the reverse_iterator by one position.
+            ** It decrements the current position (_currentPos) by one, indicating the reverse traversal.
+            ** The function returns a reference to the updated reverse_iterator.
             */
             reverse_iterator &operator++() {
                 --_currentPos;
                 return *this;
             }
 
+            /**
+            ** @brief: Advances the reverse_iterator by one position.
+            **
+            ** This member function is used to advance the reverse_iterator by one position.
+            ** It creates a temporary reverse_iterator (temp) initialized with the current reverse_iterator.
+            ** Then, it increments the current reverse_iterator by calling the prefix increment operator (++(*this)).
+            ** Finally, it returns the temporary reverse_iterator, representing the previous position before the increment.
+            */
             reverse_iterator operator++(int) {
                 reverse_iterator temp = *this;
                 ++(*this);

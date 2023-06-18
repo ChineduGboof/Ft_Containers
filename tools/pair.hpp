@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pair.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gboof <gboof@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 14:00:55 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/06/07 19:08:56 by gboof            ###   ########.fr       */
+/*   Updated: 2023/06/18 12:11:29 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,40 +54,61 @@ template <class T1, class T2> struct pair {
 	}
 };
 
+// operator== - Equality comparison operator for pairs.
+
 template <class T1, class T2>
 bool operator== (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return lhs.first==rhs.first && lhs.second==rhs.second; 
+    return lhs.first == rhs.first && lhs.second == rhs.second; 
 }
+
+// operator!= - Inequality comparison operator for pairs.
 
 template <class T1, class T2>
 bool operator!= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return !(lhs==rhs); 
+    return !(lhs == rhs); 
 }
+
+// operator< - Less than comparison operator for pairs.
 
 template <class T1, class T2>
 bool operator<  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return lhs.first<rhs.first || (!(rhs.first<lhs.first) && lhs.second<rhs.second); 
+    return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second); 
 }
+
+// operator<= - Less than or equal to comparison operator for pairs.
 
 template <class T1, class T2>
 bool operator<= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return !(rhs<lhs); 
+    return !(rhs < lhs); 
 }
+
+// operator> - Greater than comparison operator for pairs.
 
 template <class T1, class T2>
 bool operator>  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return rhs<lhs; 
+    return rhs < lhs; 
 }
+
+// operator>= - Greater than or equal to comparison operator for pairs.
 
 template <class T1, class T2>
 bool operator>= (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs) { 
-	return !(lhs<rhs); 
+    return !(lhs < rhs); 
 }
 
-/*
-**	Constructs a pair object with its first element set to x and its second element set to y.
-**	The template types can be implicitly deduced from the arguments passed to make_pair.
-*/
+/**
+ * make_pair - Creates a pair object.
+ * This function template creates and returns a pair object with the provided values of type T1 and T2.
+ * It takes two arguments, 'x' and 'y', representing the values to be stored in the pair's first and second elements, respectively.
+ * The function constructs a pair object using the provided values and returns it.
+ *
+ * @param x - The value to be stored in the first element of the pair.
+ * @param y - The value to be stored in the second element of the pair.
+ * @tparam T1 - The type of the first element.
+ * @tparam T2 - The type of the second element.
+ * @return A pair object with the specified values.
+ * The template types can be implicitly deduced from the arguments passed to make_pair.
+ */
 template <class T1,class T2>
 ft::pair<T1,T2> make_pair (T1 x, T2 y) {
     return ( ft::pair<T1,T2>(x,y) );

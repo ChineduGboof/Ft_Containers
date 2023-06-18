@@ -65,7 +65,9 @@ Execute the compiled program, and it will run the tests based on the configurati
 
 Observe the output of the program to determine if the tests pass or fail. The program will provide relevant information about the test results.
 
+## Note
 
+The codes contains appropriate comments that describe how each code works.
 
 ## Technical Guide: Exploring AVL Tree Operations in Project Ft_Containers
 

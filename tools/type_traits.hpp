@@ -6,7 +6,7 @@
 /*   By: cegbulef <cegbulef@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:57:15 by cegbulef          #+#    #+#             */
-/*   Updated: 2023/05/28 13:57:19 by cegbulef         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:16:20 by cegbulef         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,23 @@ namespace ft {
 template <bool, typename T>
 struct enable_if {};
 
+/**
+ * @brief Type trait for conditional enablement.
+ *
+ * This struct provides a conditional enablement based on a compile-time boolean condition.
+ * The primary template is empty, while the specialization with a true condition defines a nested type 'type' as 'T'.
+ */
+
 template <typename T>
 struct enable_if<true, T> { typedef T type; };
+
+/**
+ * @brief Type trait for checking integral types.
+ *
+ * This struct template checks if a given type is an integral type.
+ * The static constant 'value' is set to 'false' for the primary template.
+ * Specializations are provided for various integral types, where the 'value' is set to 'true'.
+ */
 
 template <typename>
 struct is_integral { static const bool value = false; };
